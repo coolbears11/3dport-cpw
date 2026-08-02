@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#ECEAE4"/>
+  <rect x="0.5" y="0.5" width="799" height="599" fill="none" stroke="rgba(20,22,26,0.14)"/>
+  <line x1="0" y1="300" x2="800" y2="300" stroke="rgba(20,22,26,0.08)"/>
+  <line x1="400" y1="0" x2="400" y2="600" stroke="rgba(20,22,26,0.08)"/>
+  <circle cx="400" cy="300" r="3" fill="#3ef07f"/>
+  <text x="400" y="286" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="20" letter-spacing="4" fill="rgba(20,22,26,0.55)">06 / 07</text>
+  <text x="400" y="332" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="13" letter-spacing="2" fill="rgba(20,22,26,0.32)">PLACEHOLDER MEDIA</text>
+</svg>

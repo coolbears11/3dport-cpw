@@ -1,0 +1,37 @@
+.divider {
+  position: relative;
+  min-height: 80svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  padding: var(--space-8) var(--space-5);
+  text-align: center;
+}
+
+.inner {
+  max-width: 42rem;
+}
+
+.eyebrow {
+  justify-content: center;
+  color: var(--color-ink-soft);
+  margin-bottom: var(--space-4);
+}
+
+.statement {
+  font-size: var(--fs-h2);
+  font-weight: 500;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-4);
+}
+
+.support {
+  font-size: var(--fs-lede);
+  line-height: 1.5;
+  color: var(--color-ink-soft);
+  max-width: 28rem;
+  margin: 0 auto;
+}

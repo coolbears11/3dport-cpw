@@ -1,0 +1,91 @@
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-5);
+  color: #ffffff;
+  mix-blend-mode: difference;
+  pointer-events: none;
+}
+
+.mark,
+.links,
+.menu {
+  pointer-events: auto;
+}
+
+.mark {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.links {
+  display: flex;
+  gap: var(--space-5);
+}
+
+.link {
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.82;
+  transition: opacity var(--duration-base) var(--ease-premium);
+}
+
+.link:hover {
+  opacity: 1;
+}
+
+.menu {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  background: none;
+  border: none;
+  color: inherit;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.82;
+  transition: opacity var(--duration-base) var(--ease-premium);
+}
+
+.menu:hover {
+  opacity: 1;
+}
+
+.menuIcon {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 16px;
+}
+
+.menuIcon span {
+  display: block;
+  height: 1px;
+  background: currentColor;
+}
+
+.menuIcon span:last-child {
+  width: 65%;
+}
+
+@media (max-width: 640px) {
+  .links {
+    display: none;
+  }
+}

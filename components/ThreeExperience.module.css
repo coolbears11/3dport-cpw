@@ -1,0 +1,30 @@
+.scrollContainer {
+  position: relative;
+  width: 100%;
+}
+
+.pinned {
+  position: relative;
+  height: 100svh;
+  width: 100%;
+  overflow: hidden;
+  background: var(--color-bg);
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.overlayLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+@media (max-width: 720px) {
+  .pinned {
+    height: 100svh;
+  }
+}

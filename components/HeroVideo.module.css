@@ -1,0 +1,270 @@
+.hero {
+  position: relative;
+  height: 100svh;
+  min-height: 640px;
+  width: 100%;
+  overflow: hidden;
+  background: var(--color-bg-dark);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-top: 6rem;
+  padding-bottom: 4.5rem;
+}
+
+.mediaWrap {
+  position: absolute;
+  inset: 0;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(11, 12, 13, 0.45) 0%,
+    rgba(11, 12, 13, 0.4) 45%,
+    rgba(11, 12, 13, 0.88) 100%
+  );
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 18vw rgba(0, 0, 0, 0.55);
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-6);
+  padding: 0 var(--space-5) var(--space-5);
+}
+
+.textBlock {
+  color: var(--color-on-dark);
+  max-width: 40rem;
+}
+
+.eyebrow {
+  color: var(--color-on-dark-soft);
+  margin-bottom: var(--space-3);
+}
+
+.headline {
+  font-size: clamp(2.75rem, 6.5vw, 6rem);
+  font-weight: 500;
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-3);
+}
+
+.lede {
+  font-size: var(--fs-lede);
+  line-height: 1.45;
+  color: var(--color-on-dark-soft);
+  max-width: 32rem;
+  margin-bottom: var(--space-3);
+}
+
+.divider {
+  width: 100%;
+  max-width: 34rem;
+  height: 1px;
+  background: var(--color-line-on-dark);
+  margin-bottom: var(--space-3);
+}
+
+.credentials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-4);
+  list-style: none;
+  margin: 0 0 var(--space-4);
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-on-dark-soft);
+}
+
+.credentials li:not(:last-child)::after {
+  content: "\00B7";
+  margin-left: var(--space-4);
+  opacity: 0.5;
+}
+
+.ctaRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+}
+
+.ctaPrimary,
+.ctaSecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding-bottom: 2px;
+  border-bottom: 1px solid currentColor;
+  color: var(--color-on-dark);
+}
+
+.ctaSecondary {
+  color: var(--color-on-dark-soft);
+  border-bottom-color: var(--color-line-on-dark);
+  transition: color var(--duration-base) var(--ease-premium);
+}
+
+.ctaSecondary:hover {
+  color: var(--color-on-dark);
+}
+
+.ctaArrow {
+  color: var(--color-accent);
+  transition: transform var(--duration-base) var(--ease-premium);
+}
+
+.ctaPrimary:hover .ctaArrow {
+  transform: translate(2px, 2px);
+}
+
+.graphic {
+  flex-shrink: 0;
+  width: 15rem;
+  color: var(--color-on-dark-faint);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.graphicSvg {
+  width: 100%;
+  height: auto;
+}
+
+.graphicLabel {
+  margin-top: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-on-dark-faint);
+}
+
+.chapterLabel {
+  position: absolute;
+  z-index: 2;
+  left: var(--space-5);
+  bottom: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-on-dark-faint);
+}
+
+.cornerInfo {
+  position: absolute;
+  z-index: 2;
+  right: var(--space-5);
+  bottom: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-2);
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-on-dark-faint);
+}
+
+.scrollLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.scrollLine {
+  width: 1.75rem;
+  height: 1px;
+  background: var(--color-on-dark-faint);
+  animation: scrollPulse 2.2s var(--ease-premium) infinite;
+}
+
+@keyframes scrollPulse {
+  0% {
+    transform: scaleX(0.25);
+    transform-origin: right;
+    opacity: 0.4;
+  }
+  50% {
+    transform: scaleX(1);
+    transform-origin: right;
+    opacity: 1;
+  }
+  100% {
+    transform: scaleX(0.25);
+    transform-origin: left;
+    opacity: 0.4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrollLine {
+    animation: none;
+  }
+}
+
+@media (max-width: 960px) {
+  .graphic {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .hero {
+    padding-bottom: 6.5rem;
+  }
+
+  .content {
+    padding: 0 var(--space-4) var(--space-4);
+  }
+
+  .cornerInfo {
+    right: var(--space-4);
+  }
+
+  .chapterLabel {
+    left: var(--space-4);
+  }
+}
+
+@media (max-width: 560px) {
+  .chapterLabel {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .coordinates {
+    display: none;
+  }
+}
