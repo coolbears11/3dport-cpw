@@ -60,10 +60,11 @@ export const cameraStops = {
 
   // --- Phase 3: the one deliberate non-aerial exception. The camera
   // descends through the hero building's own glazed wall into its server
-  // room, sits among the rack rows for two beats (JTT's own infrastructure,
-  // then Getty Core — the technical centerpiece pairing), then rises back
-  // out. Coordinates are interior/near-building, not aerial — intentional,
-  // scoped to this one moment only.
+  // room, holds on JTT's own infrastructure, then pivots and rises back
+  // out. Only JTT is narrated in here — the pivot beat (Interior2) is
+  // pure camera movement now, so no supporting project appears inside the
+  // hero building. Coordinates are interior/near-building, not aerial —
+  // intentional, scoped to this one moment only.
   jttServerEnter: { position: [2, 6, 8], target: [0.5, 1.8, 2.8], fov: 44 },
   jttServerInterior1: { position: [-1.8, 1.7, -1.4], target: [2.2, 1.1, 2.6], fov: 50 },
   jttServerInterior2: { position: [1.8, 1.7, -1.4], target: [-2.2, 1.1, 2.6], fov: 50 },
@@ -76,10 +77,12 @@ export const cameraStops = {
   // establishing shot so none of them compete with JTT for attention.
   campusResume: aerialStop([0, 0.5, 0], -10, 40, 33, 27),
   // Targets follow each project's actual building position (see
-  // data/worldLayout.js) — Block 100 now sits at project05, Getty Core at
-  // project06, Lockheed at project02, Moxy at project03.
-  block100Reveal: supportingStop([11, 0.5, -3], 60, 32, 36, 26),
+  // data/worldLayout.js) — Getty Core sits at project06, Block 100 at
+  // project05, Lockheed at project02, Moxy at project03. The sequence
+  // below visits them in 02-05 label order, matching hotspotBuildingOrder
+  // in data/sections.js.
   gettyCoreReveal: supportingStop([8, 0.5, 4], 75, 32, 36, 26),
+  block100Reveal: supportingStop([11, 0.5, -3], 60, 32, 36, 26),
   lockheedReveal: supportingStop([-9, 0.5, -2], -55, 32, 36, 26),
   moxyReveal: supportingStop([-11, 0.5, 4.5], -70, 34, 37, 26),
 
@@ -97,8 +100,8 @@ export const cameraSequence = [
   "jttServerInterior2",
   "jttServerExit",
   "campusResume",
-  "block100Reveal",
   "gettyCoreReveal",
+  "block100Reveal",
   "lockheedReveal",
   "moxyReveal",
   "campusFarewell",

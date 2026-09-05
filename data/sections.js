@@ -6,10 +6,11 @@
 // reaches it.
 //
 // Each entry is a "beat" tied to a camera stop (see data/cameraStops.js).
-// JTT and Getty Core each appear twice — once as an exterior building
-// beat, once inside the hero's server room — since Getty Core is the
-// other project featured on the racks. `sectionLabel` numbers the 5
-// unique projects (01-05) consistently across every beat they appear in.
+// JTT is the only project that appears twice — once as an exterior
+// building beat, once inside its own server room. Every supporting
+// project appears exactly once, at its own building, so nothing shows up
+// somewhere it doesn't belong. `sectionLabel` numbers the 5 unique
+// projects (01-05), and the beats now run in that same 01-05 order.
 //
 // `detail` holds the richer copy shown in the full-screen project modal
 // (opened via "View Project"): a longer summary, resume-sourced bullet
@@ -29,23 +30,23 @@ export const sections = [
         location: "Lafayette, IN",
         role: "Site Selection & Feasibility",
         description:
-          "Confirmed 500 MW of available capacity with Duke Energy and led feasibility analysis covering utility availability, zoning, and interconnection for a target data center parcel.",
+          "Confirmed 150 MW of available capacity with Duke Energy and led feasibility analysis covering utility availability, zoning, and interconnection for a target data center parcel.",
         year: "2026 – Present",
         media: "/images/projects/jtt-gigascale.jpg",
         alignment: "center",
         detail: {
           summary:
-            "Independent site-selection and feasibility engagement for a hyperscale AI data center campus in Lafayette, IN. Engaged directly with Duke Energy to confirm power availability, reviewed owner and geotechnical documentation, and structured the commercial terms to secure site control.",
+            "Independent site-selection and feasibility engagement for a hyperscale AI data center campus in Lafayette, IN. Engaged directly with Duke Energy to confirm power availability, reviewed owner and geotechnical documentation, and is currently developing the contract structure to bring to a prospective buyer.",
           stats: [
-            { label: "Available Capacity", value: "500 MW" },
-            { label: "Expansion Potential", value: "+500 MW" },
+            { label: "Available Capacity", value: "150 MW" },
+            { label: "Expansion Potential", value: "300+ MW" },
             { label: "Utility Partner", value: "Duke Energy" },
             { label: "Market", value: "Lafayette, IN" },
           ],
           highlights: [
-            "Confirmed 500 MW of available capacity with no required utility upgrades through direct engagement with Duke Energy on a target parcel.",
+            "Confirmed 150 MW of available capacity with no required utility upgrades through direct engagement with Duke Energy on a target parcel, with expansion potential of 300+ MW.",
             "Reviewed owner documentation and engineering plans from Shook Brokerage; built power maps and feasibility analyses covering utility availability, substation proximity, interconnection timelines, zoning, and water access.",
-            "Drafted letters of intent and structured a consulting-fee model to assign purchase rights at closing, with attorney review.",
+            "Currently developing the contract structure to propose to a prospective buyer, with attorney review.",
           ],
         },
       },
@@ -71,7 +72,7 @@ export const sections = [
           summary:
             "The technical backbone behind the JTT Gigascale pursuit: utility capacity, network connectivity, thermal management, and land feasibility, each validated against real engineering and brokerage documentation before the site moves to acquisition.",
           highlights: [
-            "Power & Capacity: confirmed 150 MW of immediate available capacity with Duke Energy, with expansion potential up to 500 MW and no required utility upgrades.",
+            "Power & Capacity: confirmed 150 MW of immediate available capacity with Duke Energy, with expansion potential of 300+ MW and no required utility upgrades.",
             "Data & Connectivity: evaluated proximity to major fiber backbones to ensure low-latency, high-bandwidth connectivity for AI and HPC workloads.",
             "Water & Cooling: conducted feasibility analysis on local water access to support advanced liquid cooling and standard HVAC for high-density server environments.",
             "Land & Geotechnical: reviewed owner documentation, engineering plans, ALTA surveys, and geotechnical reports from Shook Brokerage to validate buildability and zoning compliance.",
@@ -81,11 +82,11 @@ export const sections = [
     ],
   },
   {
-    id: "getty-interior",
-    cameraStop: "jttServerInterior2",
+    id: "getty-exterior",
+    cameraStop: "gettyCoreReveal",
     projects: [
       {
-        id: "getty-interior-project",
+        id: "getty-exterior-project",
         sectionLabel: "02",
         title: "Getty Core",
         category: "Higher Education / Cultural Facility",
@@ -93,17 +94,18 @@ export const sections = [
         role: "Preconstruction Estimating",
         employer: "Swinerton — General Contractor",
         description:
-          "Comprehensive quantity takeoffs and trade package estimates for the Getty Core preconstruction pursuit, isolating scope changes across design-build, hard-bid, and CMAR revision sets.",
+          "Conceptual budget for a new education building on the Getty Museum campus — a CMAR pursuit priced from 50% schematic design drawings while the project was still being competed for.",
         year: "2026",
         media: "/images/projects/getty-core.jpg",
         alignment: "right",
         detail: {
           summary:
-            "One of four active commercial pursuits estimated during a Swinerton internship in Los Angeles. Ran takeoffs across SD, DD, and CD drawing sets and built MasterFormat and UniFormat estimates alongside the OCLA estimating team.",
+            "An active CMAR pursuit during a Swinerton internship in Los Angeles: a new education building on the Getty Museum campus. The project had not been awarded — the team was assembling a conceptual budget for the owner while competing for the job, working from a 50% schematic design set that left much of the scope still undefined.",
           highlights: [
-            "Produced comprehensive quantity takeoffs and trade package estimates spanning design-build, hard bid, and CMAR delivery.",
-            "Ran drawing overlays and slipsheets in On-Screen Takeoff and Bluebeam to isolate scope changes across revision sets.",
-            "Built MasterFormat and UniFormat estimates in Destini with the OCLA estimating team.",
+            "Produced quantity takeoffs across a wide range of trades from the 50% SD set, working alongside the OCLA estimating team.",
+            "Built the conceptual budget using conceptual estimating methods and historical pricing to cover scope the schematic drawings had not yet resolved.",
+            "Developed bid alternates and identified subcontractors to carry scopes that were not yet defined in the design.",
+            "Ran takeoffs in On-Screen Takeoff and Bluebeam, and built MasterFormat and UniFormat estimates in Destini.",
           ],
           gallery: ["/images/projects/swinerton-team.jpg"],
         },
@@ -123,49 +125,19 @@ export const sections = [
         role: "Preconstruction Estimating",
         employer: "Swinerton — General Contractor",
         description:
-          "Managed estimating for an active commercial pursuit in Newport Beach — defining scopes, organizing bid packages, and leveling subcontractor pricing.",
+          "Envelope and roofing takeoffs for an active Swinerton pursuit in Newport Beach, run with the San Diego estimating team and formatted to the client's requested estimating breakdowns.",
         year: "2026",
         media: "/images/projects/block100-apartments.avif",
         alignment: "left",
         detail: {
           summary:
-            "Active Swinerton commercial pursuit in Newport Beach. Defined trade scopes and organized bid packages to level subcontractor pricing and surface cost opportunities ahead of award.",
+            "Active Swinerton commercial pursuit in Newport Beach, run in collaboration with the Swinerton San Diego team. Scope centered on the building envelope and roofing packages, with quantities reviewed for accuracy before being carried into the estimate.",
           highlights: [
-            "Defined scopes and organized bid packages across trades.",
-            "Separated bid alternates to level subcontractor pricing and identify cost opportunities.",
-            "Produced quantity takeoffs and trade package estimates as part of a four-project Swinerton pursuit slate.",
+            "Collaborated with the Swinerton San Diego team, running takeoffs in On-Screen Takeoff across balcony sheet metal, terraces, roofs, TPO roofing, and parapets.",
+            "Worked through specific estimating styles and breakdowns to meet the client's requirements.",
+            "Participated in owner meetings alongside the estimating team.",
+            "Reviewed each takeoff for accuracy before uploading the quantities into Destini.",
           ],
-          gallery: ["/images/projects/swinerton-team.jpg"],
-        },
-      },
-    ],
-  },
-  {
-    id: "getty-exterior",
-    cameraStop: "gettyCoreReveal",
-    projects: [
-      {
-        id: "getty-exterior-project",
-        sectionLabel: "02",
-        title: "Getty Core",
-        category: "Higher Education / Cultural Facility",
-        location: "Los Angeles, CA",
-        role: "Preconstruction Estimating",
-        employer: "Swinerton — General Contractor",
-        description:
-          "Comprehensive quantity takeoffs and trade package estimates for the Getty Core preconstruction pursuit, isolating scope changes across design-build, hard-bid, and CMAR revision sets.",
-        year: "2026",
-        media: "/images/projects/getty-core.jpg",
-        alignment: "right",
-        detail: {
-          summary:
-            "One of four active commercial pursuits estimated during a Swinerton internship in Los Angeles. Ran takeoffs across SD, DD, and CD drawing sets and built MasterFormat and UniFormat estimates alongside the OCLA estimating team.",
-          highlights: [
-            "Produced comprehensive quantity takeoffs and trade package estimates spanning design-build, hard bid, and CMAR delivery.",
-            "Ran drawing overlays and slipsheets in On-Screen Takeoff and Bluebeam to isolate scope changes across revision sets.",
-            "Built MasterFormat and UniFormat estimates in Destini with the OCLA estimating team.",
-          ],
-          gallery: ["/images/projects/swinerton-team.jpg"],
         },
       },
     ],
@@ -177,32 +149,33 @@ export const sections = [
       {
         id: "lockheed-project",
         sectionLabel: "04",
-        title: "Lockheed Martin B648 Concept",
+        title: "Conceptual Aerospace Facility & B648 Vestibule",
         category: "Aerospace / Mission-Critical",
         location: "Palmdale, CA",
         role: "Preconstruction & Estimating",
         employer: "The Austin Company — Design-Build",
         description:
-          "Supported owner-side preconstruction on a 20,000 SF mission-critical aerospace facility, coordinating change orders through 30/60/90% design with Lockheed Martin's design team.",
+          "Two aerospace projects: owner-side preconstruction on Lockheed Martin's 50,000 SF B648 Vestibule, and a full independent takeoff and cost model for a separate conceptual aerospace facility.",
         year: "2025",
         media: "/images/projects/lockheed-b648.jpg",
         alignment: "center",
         detail: {
           summary:
-            "Owner-side preconstruction support for Lockheed Martin's B648 Vestibule, a 20,000 SF mission-critical aerospace facility, during an internship with The Austin Company. Also completed an independent estimating exercise: a full quantity takeoff and 30% cost model for a 156,000 SF facility across CSI Divisions 01–33.",
+            "Two separate pieces of work from an internship with The Austin Company, kept distinct here because they carry different scopes and different disclosure limits. B648 Vestibule: owner-side preconstruction on a 50,000 SF mission-critical facility for Lockheed Martin, shown in the image above; project figures are confidential and are not published. Conceptual Aerospace Facility: an independent estimating exercise on a 156,000 SF facility, and the source of the full cost model below. Both covered all CSI divisions.",
           stats: [
             { label: "Total Design & Construction", value: "$72.8M" },
             { label: "Direct Construction Cost", value: "$59.7M" },
             { label: "Cost per SF", value: "$467" },
-            { label: "Facility Size", value: "156,000 SF" },
+            { label: "Conceptual Facility", value: "156,000 SF" },
           ],
           highlights: [
-            "Supported owner-side preconstruction on aerospace projects for Lockheed Martin, Northrop Grumman, Raytheon, and L3Harris, including the B648 Vestibule — a 20,000 SF mission-critical facility.",
-            "Coordinated with architects, engineers, and MEP estimators through 30%, 60%, and 90% design phases to manage change orders and adjust pricing.",
-            "Completed an independent full quantity takeoff and 30% cost model across CSI Divisions 01–33, presenting cost assumptions and constructability findings to the estimating team.",
+            "B648 Vestibule — supported owner-side preconstruction on a 50,000 SF mission-critical facility for Lockheed Martin, working across all CSI divisions.",
+            "B648 Vestibule — coordinated with architects, engineers, and MEP estimators through 30%, 60%, and 90% design phases to manage change orders and adjust pricing.",
+            "Conceptual Aerospace Facility — completed an independent full quantity takeoff and 30% cost model on a 156,000 SF facility across CSI Divisions 01–33, presenting cost assumptions and constructability findings to the estimating team.",
+            "Supported owner-side preconstruction on aerospace work for Lockheed Martin, Northrop Grumman, Raytheon, and L3Harris.",
           ],
           costBreakdown: {
-            caption: "Intern estimating exercise — CSI Division 01–33 cost model, $467/SF",
+            caption: "Conceptual aerospace facility — CSI Division 01–33 cost model, 156,000 SF at $467/SF",
             rows: [
               { div: "01", description: "General Conditions & Staffing", total: "$2,979,193", perSf: "$19.10" },
               { div: "03", description: "Concrete", total: "$4,667,000", perSf: "$29.92" },
@@ -245,7 +218,8 @@ export const sections = [
           highlights: [
             "Ran full MEP takeoffs for the Moxy Hotel, pulling quantities from schedules and specifications.",
             "Ran drawing overlays and slipsheets to isolate scope changes across revision sets.",
-            "Supported hard-bid pursuits including Dick's House of Sport (Glendale, AZ) and a Las Vegas Strip storefront package.",
+            "Set up and ran job walks on site to verify existing conditions ahead of pricing.",
+            "Handled subcontractor outreach and coordinated subs through the bid period.",
           ],
         },
       },

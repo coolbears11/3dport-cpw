@@ -32,28 +32,43 @@ export const ZONE_A_BUILDINGS = [
     equipment: [{ type: "vent", offset: [0.5, 0] }],
   },
   {
-    // Lockheed Martin B648 Concept — a low, wide assembly hangar with a
-    // sawtooth industrial roof and a small glazed office/entry annex,
-    // matching the real B648 facility's massing (a long low hall, not a
-    // tower).
+    // Lockheed Martin B648 Vestibule — two separate low volumes with
+    // open ground between them, joined by a glazed vestibule link. The
+    // vestibule is the connector between the two buildings, which is why
+    // this reads as a split pair rather than one hall with a bolted-on
+    // annex. Sawtooth industrial roof on both volumes.
     id: "project02",
     position: [-9, -2],
-    size: [5.8, 1.9, 4],
+    size: [7.2, 2.4, 4],
+    shape: "split",
     roof: "sawtooth",
-    windowFaces: [],
+    windowFaces: ["front"],
+    split: {
+      gap: 1.1,
+      ratio: 0.56,
+      heightRatio: 0.78,
+      depthRatio: 0.85,
+      linkHeight: 1.5,
+      linkDepth: 1.8,
+    },
     equipment: [
-      { type: "ac", offset: [1.4, 1] },
-      { type: "fan", offset: [-1.4, -1] },
+      { type: "ac", offset: [1.2, 1] },
+      { type: "fan", offset: [-1.2, -1] },
     ],
-    annex: { width: 1.5, height: 1.6, depth: 1.3, position: [3.5, 0.8] },
   },
   {
-    // Moxy Hotel — podium + guestroom tower.
+    // Moxy Hotel — a 7-storey, 163-key hotel on a 0.76-acre lot: two
+    // levels of podium parking with the guestroom block stepping back only
+    // slightly above, and the rooftop bar deck on top. Compact and urban,
+    // not a slender tower — the lot is too small for one.
     id: "project03",
     position: [-11, 4.5],
-    size: [2.6, 6.5, 2.4],
+    size: [3.4, 5.2, 3],
     shape: "podium",
-    equipment: [{ type: "vent", offset: [0, 0] }],
+    // Mechanical rides the podium roof in the setback strip. Anything at
+    // offset [0, 0] would sit dead centre on the guestroom roof, in the
+    // middle of the bar deck.
+    equipment: [{ type: "ac", offset: [0.9, 0.6] }],
   },
   {
     // The hero building — JTT Gigascale. Rendered by HeroDataCenter, not
