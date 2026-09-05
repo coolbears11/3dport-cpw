@@ -258,6 +258,7 @@ export default function PlaceholderEnvironment() {
             equipment={b.equipment}
             dock={b.dock}
             annex={b.annex}
+            split={b.split}
             name={`building_${b.id}`}
           />
         )

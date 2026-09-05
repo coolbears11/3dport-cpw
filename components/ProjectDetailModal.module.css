@@ -93,12 +93,17 @@
   grid-area: media;
   overflow: hidden;
   min-height: 14rem;
+  /* Without a cap this stretches to match however tall the header and body
+     cards add up to, which on a long entry crops the photo to a sliver. */
+  max-height: 32rem;
 }
 
 .mediaCard img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* Bias upward: subjects sit above centre in most of these shots. */
+  object-position: center 35%;
   display: block;
 }
 
@@ -256,12 +261,22 @@
   grid-area: gallery;
   overflow: hidden;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(0.9rem, 2vw, 1.5rem);
+  padding: var(--space-3);
 }
 
+/* `contain` rather than `cover`: this card is as wide as the whole grid, so
+   cover forces a landscape photo into a wide, short band and cuts the top
+   and bottom off it. Letting the image keep its own proportions and sit
+   centred shows all of it. */
 .galleryCard img {
-  width: 100%;
-  max-height: 14rem;
-  object-fit: cover;
+  width: auto;
+  max-width: 100%;
+  min-width: 0;
+  max-height: 24rem;
+  object-fit: contain;
   display: block;
 }
 
@@ -279,5 +294,14 @@
 
   .mediaCard {
     min-height: 11rem;
+    max-height: 20rem;
+  }
+
+  .galleryCard {
+    flex-direction: column;
+  }
+
+  .galleryCard img {
+    max-height: 15rem;
   }
 }

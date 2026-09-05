@@ -101,14 +101,27 @@ function ShedRoof({ width, depth, rise = 0.7, color = STONE_DARK }) {
 }
 
 // Repeating shed-roof teeth across the building's width — the classic
-// industrial "sawtooth" silhouette.
-function SawtoothRoof({ width, depth, teeth = 3, rise = 0.55, color = STONE_DARK }) {
+// industrial "sawtooth" silhouette. Each tooth slopes across its own
+// width (a short run, so the pitch actually reads from the air) rather
+// than across the building's full depth, and the tall edge of each tooth
+// carries a glazed north-light riser, which is the whole point of a
+// sawtooth roof.
+function SawtoothRoof({ width, depth, teeth = 4, rise = 0.5, color = STONE_DARK }) {
   const toothWidth = width / teeth;
+  const slantLen = Math.sqrt(toothWidth * toothWidth + rise * rise);
+  const angle = Math.atan2(rise, toothWidth);
   return (
     <group>
       {Array.from({ length: teeth }).map((_, i) => (
         <group key={i} position={[-width / 2 + toothWidth * (i + 0.5), 0, 0]}>
-          <ShedRoof width={toothWidth} depth={depth} rise={rise} color={color} />
+          <mesh position={[0, rise / 2, 0]} rotation={[0, 0, -angle]} castShadow>
+            <boxGeometry args={[slantLen, 0.07, depth]} />
+            <meshStandardMaterial color={color} roughness={0.7} />
+          </mesh>
+          <mesh position={[toothWidth / 2, rise / 2, 0]}>
+            <boxGeometry args={[0.05, rise, depth * 0.94]} />
+            <meshStandardMaterial color={GLASS} roughness={0.25} metalness={0.4} transparent opacity={0.7} />
+          </mesh>
         </group>
       ))}
     </group>
@@ -265,7 +278,7 @@ function CylinderShell({ size, name }) {
 
 // Twin residential towers sharing one footprint — Block 100's actual
 // massing (2 towers, 15 stories each) rather than a single block.
-function TowersShell({ size, name }) {
+function TowersShell({ size, name, equipment = [] }) {
   const [totalW, h, d] = size;
   const gap = totalW * 0.22;
   const towerW = (totalW - gap) / 2;
@@ -278,6 +291,10 @@ function TowersShell({ size, name }) {
           <BuildingWindows size={[towerW, h, d]} faces={["front", "back", "left", "right"]} rows={5} />
           <group position={[0, h, 0]}>
             <ParapetRoof width={towerW} depth={d} />
+            {/* mechanical rides the left tower's roof. Offsets are relative
+                to that roof, not the overall footprint — at the footprint
+                centre it would hang in the gap between the two towers. */}
+            {i === 0 && <RoofEquipment items={equipment} roofY={0.02} />}
           </group>
         </group>
       ))}
@@ -285,33 +302,110 @@ function TowersShell({ size, name }) {
   );
 }
 
-// A podium base with a single slender tower centered on top — a hotel's
-// classic massing (podium, "jump" lobby, guestroom tower).
-function PodiumShell({ size, name }) {
+// A low parking podium carrying a guestroom block that steps back only
+// slightly, plus a rooftop deck — an urban hotel on a tight lot, which is
+// what the Moxy actually is (7 storeys, 163 keys, two garage levels, a
+// roof bar). An earlier version made the upper block barely half the
+// podium width, which read as a slender tower on a wide slab.
+function PodiumShell({ size, name, equipment = [] }) {
   const [pw, totalH, pd] = size;
-  const podiumH = Math.min(totalH * 0.28, 1.6);
+  const podiumH = totalH * 0.3;
   const towerH = totalH - podiumH;
-  const towerW = pw * 0.52;
-  const towerD = pd * 0.6;
+  const towerW = pw * 0.9;
+  const towerD = pd * 0.88;
+  const deckW = towerW * 0.62;
+  const deckD = towerD * 0.55;
   return (
     <group>
+      {/* two-level parking podium */}
       <EdgeBox args={[pw, podiumH, pd]} position={[0, podiumH / 2, 0]} color={STONE} name={name} />
-      <BuildingWindows size={[pw, podiumH, pd]} faces={["front", "left"]} rows={1} />
+      <BuildingWindows size={[pw, podiumH, pd]} faces={["front", "left"]} rows={2} />
+
+      {/* guestroom block, stepped back slightly on all sides */}
       <group position={[0, podiumH, 0]}>
-        <ParapetRoof width={pw} depth={pd} />
-      </group>
-      <group position={[0, podiumH, 0]}>
+        {/* mechanical sits on the podium roof, in the setback strip */}
+        <RoofEquipment items={equipment} roofY={0.02} />
         <EdgeBox args={[towerW, towerH, towerD]} position={[0, towerH / 2, 0]} color={STONE} />
-        <BuildingWindows size={[towerW, towerH, towerD]} faces={["front", "back", "left", "right"]} rows={4} />
+        <BuildingWindows size={[towerW, towerH, towerD]} faces={["front", "back", "left", "right"]} rows={5} />
         <group position={[0, towerH, 0]}>
           <ParapetRoof width={towerW} depth={towerD} />
+          {/* roof deck — the rooftop bar */}
+          <mesh position={[0, 0.03, deckD * 0.1]} rotation={[-Math.PI / 2, 0, 0]}>
+            <planeGeometry args={[deckW, deckD]} />
+            <meshStandardMaterial color={STONE_DARK} roughness={0.85} />
+          </mesh>
         </group>
       </group>
     </group>
   );
 }
 
-// A general-purpose compound building. Four shapes: a massed box (solid
+// Two separate volumes with open ground between them, joined by a low
+// glazed link — the B648 Vestibule's actual arrangement, where the
+// vestibule is the connector rather than a wing tacked onto one side.
+// `split` tunes the pairing: `gap` is the clear distance between the two
+// volumes, `ratio` how the remaining width divides between them, and
+// `heightRatio` / `depthRatio` size the second volume against the first.
+function SplitShell({ size, name, roof = "flat", windowFaces = [], equipment = [], split = {} }) {
+  const [w, h, d] = size;
+  const gap = split.gap ?? w * 0.16;
+  const ratio = split.ratio ?? 0.5;
+  const hB = h * (split.heightRatio ?? 1);
+  const dB = d * (split.depthRatio ?? 1);
+  const solid = w - gap;
+  const wA = solid * ratio;
+  const wB = solid - wA;
+  const xA = -w / 2 + wA / 2;
+  const xB = w / 2 - wB / 2;
+
+  const linkW = gap + 0.4;
+  const linkH = split.linkHeight ?? Math.min(h, hB) * 0.62;
+  const linkD = split.linkDepth ?? d * 0.42;
+  const sillH = linkH * 0.22;
+
+  return (
+    <group>
+      {/* volume A — the larger hall */}
+      <group position={[xA, 0, 0]}>
+        <EdgeBox args={[wA, h, d]} position={[0, h / 2, 0]} color={STONE} name={name} />
+        <BuildingWindows size={[wA, h, d]} faces={windowFaces} />
+        <group position={[0, h, 0]}>
+          <Roof type={roof} width={wA} depth={d} />
+          <RoofEquipment items={equipment} roofY={roof === "flat" ? 0.02 : 0.04} />
+        </group>
+      </group>
+
+      {/* volume B */}
+      <group position={[xB, 0, 0]}>
+        <EdgeBox args={[wB, hB, dB]} position={[0, hB / 2, 0]} color={STONE} />
+        <BuildingWindows size={[wB, hB, dB]} faces={windowFaces} />
+        <group position={[0, hB, 0]}>
+          <Roof type={roof} width={wB} depth={dB} />
+        </group>
+      </group>
+
+      {/* the vestibule itself — solid sill, glazed above, own parapet */}
+      <group position={[(xA + wA / 2 + xB - wB / 2) / 2, 0, 0]}>
+        <EdgeBox args={[linkW, sillH, linkD]} position={[0, sillH / 2, 0]} color={STONE_DARK} edgeOpacity={0.4} />
+        <EdgeBox
+          args={[linkW, linkH - sillH, linkD]}
+          position={[0, sillH + (linkH - sillH) / 2, 0]}
+          color={GLASS}
+          roughness={0.2}
+          metalness={0.45}
+          transparent
+          opacity={0.42}
+          edgeOpacity={0.35}
+        />
+        <group position={[0, linkH, 0]}>
+          <ParapetRoof width={linkW} depth={linkD} />
+        </group>
+      </group>
+    </group>
+  );
+}
+
+// A general-purpose compound building. Five shapes: a massed box (solid
 // shell, a windowed facade or two, one of several roof silhouettes, and
 // rooftop mechanical fixtures), a tall cylinder (silo-massed, accent bands
 // instead of windows), twin towers, or a podium + tower. Enough variety
@@ -327,6 +421,7 @@ export default function DetailedBuilding({
   equipment = [],
   dock,
   annex,
+  split,
   name,
 }) {
   const [w, h, d] = size;
@@ -343,8 +438,7 @@ export default function DetailedBuilding({
   if (shape === "towers") {
     return (
       <group position={[position[0], 0, position[1]]}>
-        <TowersShell size={size} name={name} />
-        <RoofEquipment items={equipment} roofY={h + 0.12} />
+        <TowersShell size={size} name={name} equipment={equipment} />
       </group>
     );
   }
@@ -352,8 +446,22 @@ export default function DetailedBuilding({
   if (shape === "podium") {
     return (
       <group position={[position[0], 0, position[1]]}>
-        <PodiumShell size={size} name={name} />
-        <RoofEquipment items={equipment} roofY={h + 0.12} />
+        <PodiumShell size={size} name={name} equipment={equipment} />
+      </group>
+    );
+  }
+
+  if (shape === "split") {
+    return (
+      <group position={[position[0], 0, position[1]]}>
+        <SplitShell
+          size={size}
+          name={name}
+          roof={roof}
+          windowFaces={windowFaces}
+          equipment={equipment}
+          split={split}
+        />
       </group>
     );
   }
