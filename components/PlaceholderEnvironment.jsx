@@ -16,6 +16,7 @@ import {
   ZONE_A_SOLAR_FIELD,
   ZONE_A_UTILITY_BLOCKS,
   ZONE_A_MERGE_POINT,
+  UTILITY_CORRIDORS,
   ZONE_A_TREES,
   ZONE_A_SHRUBS,
   ZONE_A_PATHS,
@@ -175,9 +176,60 @@ function GroundTrace({ points }) {
   return <Line points={points} color={TRACE} transparent opacity={0.3} lineWidth={1} />;
 }
 
+// Offsets a polyline sideways in the XZ plane by `d`. Each vertex is
+// pushed along the perpendicular of the average direction of its
+// neighbours, which keeps parallel strands tidy through the right-angle
+// turns these routes are made of.
+function offsetPolyline(points, d) {
+  const n = points.length;
+  return points.map((p, i) => {
+    const prev = points[Math.max(0, i - 1)];
+    const next = points[Math.min(n - 1, i + 1)];
+    let dx = next[0] - prev[0];
+    let dz = next[2] - prev[2];
+    const len = Math.hypot(dx, dz) || 1;
+    dx /= len;
+    dz /= len;
+    return new THREE.Vector3(p[0] - dz * d, p[1], p[2] + dx * d);
+  });
+}
+
+// A banded utility corridor: several thin parallel strands following one
+// route, with an optional single accent strand picked out among them.
+// This is the signature look of the reference sites — services read as a
+// ribbon of many conductors rather than as a single drawn line.
+//
+// Entirely static. No useFrame, no per-frame allocation: a corridor forty
+// units long costs exactly what a short one does.
+function UtilityCorridor({ points, strands = 7, spacing = 0.17, accent = false }) {
+  const lines = useMemo(() => {
+    const mid = (strands - 1) / 2;
+    return Array.from({ length: strands }).map((_, i) => ({
+      pts: offsetPolyline(points, (i - mid) * spacing),
+      // the accent strand sits just off centre, never dead centre
+      isAccent: accent && i === Math.max(0, Math.floor(mid) - 1),
+    }));
+  }, [points, strands, spacing, accent]);
+
+  return (
+    <group>
+      {lines.map((l, i) => (
+        <Line
+          key={i}
+          points={l.pts}
+          color={l.isAccent ? ACCENT : TRACE}
+          transparent
+          opacity={l.isAccent ? 0.85 : 0.34}
+          lineWidth={l.isAccent ? 1.3 : 1}
+        />
+      ))}
+    </group>
+  );
+}
+
 // A large, sparse blueprint-style grid lying flat on the ground, reinforcing
 // the "site plan / infrastructure map" reading from the aerial camera.
-function GroundGrid({ size = 180, divisions = 48, position = [0, 0.01, 0] }) {
+function GroundGrid({ size = 240, divisions = 60, position = [0, 0.01, 0] }) {
   const grid = useMemo(() => {
     const g = new THREE.GridHelper(size, divisions, STONE_DEEP, STONE_DEEP);
     g.material.transparent = true;
@@ -202,7 +254,9 @@ export default function PlaceholderEnvironment() {
   return (
     <group>
       <color attach="background" args={[STONE]} />
-      <fog attach="fog" args={[STONE, 50, 150]} />
+      {/* Generation now sits ~34 units west, so both zones have to stay
+          legible from one wide isometric shot. */}
+      <fog attach="fog" args={[STONE, 95, 260]} />
 
       <ambientLight intensity={0.65} />
       <hemisphereLight args={["#ffffff", STONE_DEEP, 0.5]} />
@@ -221,11 +275,12 @@ export default function PlaceholderEnvironment() {
       {/* ground — sized generously beyond the camera's route so no edge is
           ever visible from the aerial framing. */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
-        <planeGeometry args={[160, 160]} />
+        <planeGeometry args={[230, 200]} />
         <meshStandardMaterial color={STONE} roughness={0.95} />
       </mesh>
       <GroundGrid />
       <GroundDots width={70} depth={70} center={[0, 0]} />
+      <GroundDots width={50} depth={44} center={[-28, -7]} />
 
       {/* future .glb integration point: replace everything below with
           <InfrastructureModel /> loading /public/models/infrastructure.glb
@@ -290,6 +345,12 @@ export default function PlaceholderEnvironment() {
           rest of the way into the hero building — "everything feeds JTT." */}
       {zoneATraceWaypoints.map((pts, i) => (
         <GroundTrace key={i} points={pts.map((p) => new THREE.Vector3(...p))} />
+      ))}
+
+      {/* The banded corridors, including the trunk run from the power
+          field. Static lines only — deliberately NOT EnergyPaths. */}
+      {UTILITY_CORRIDORS.map((c) => (
+        <UtilityCorridor key={c.id} points={c.points} strands={c.strands} accent={c.accent} />
       ))}
       <EnergyPaths
         waypoints={MERGE_TO_HERO_WAYPOINTS}
