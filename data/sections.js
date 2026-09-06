@@ -18,6 +18,56 @@
 // (Lockheed's estimate exercise), and a secondary gallery image.
 
 export const sections = [
+  // --- System beats. These carry no project and open no modal: they are
+  // the feasibility layer of the JTT work, narrated out on the site itself
+  // while the camera is among the turbines, the solar field, and the
+  // traces running into the hall. `kind: "note"` tells ProjectOverlay to
+  // render them as a statement rather than a project card.
+  {
+    id: "sys-generation",
+    cameraStop: "windField",
+    projects: [
+      {
+        id: "sys-generation-note",
+        kind: "note",
+        category: "System / Generation",
+        title: "Power & Capacity",
+        description:
+          "150 MW of available capacity confirmed with Duke Energy on the target parcel — no required utility upgrades, and expansion potential beyond 300 MW.",
+        alignment: "left",
+      },
+    ],
+  },
+  {
+    id: "sys-site",
+    cameraStop: "solarField",
+    projects: [
+      {
+        id: "sys-site-note",
+        kind: "note",
+        category: "System / Site",
+        title: "Land & Buildability",
+        description:
+          "Owner documentation, engineering plans, ALTA surveys and geotechnical reports reviewed against substation proximity, interconnection timelines, zoning and water access.",
+        alignment: "right",
+      },
+    ],
+  },
+  {
+    id: "sys-interconnection",
+    cameraStop: "powerConverge",
+    projects: [
+      {
+        id: "sys-interconnection-note",
+        kind: "note",
+        category: "System / Interconnection",
+        title: "Everything Feeds the Hall",
+        description:
+          "Fiber backbone proximity for low-latency compute, water access sized for liquid cooling. Every trace on this site terminates at one building.",
+        alignment: "center",
+      },
+    ],
+  },
   {
     id: "jtt-exterior",
     cameraStop: "jttReveal",

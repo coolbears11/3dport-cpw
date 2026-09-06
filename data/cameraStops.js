@@ -63,6 +63,26 @@ export const cameraStops = {
   // Descend into perspective. Same compound, now with facades.
   zoneAEstablish: aerialStop([0, 0.5, 2], 8, 42, 34, 27),
 
+  // --- Phase 1b: THE UTILITIES, narrated on their own before the hero
+  // appears. The turbines, the solar cascade and the trace network were
+  // always in the scene but were never the subject of a single shot — the
+  // camera flew straight past the things that make the site viable. These
+  // three beats are deliberately low and close, at or near hub height,
+  // because generation equipment only feels large from underneath.
+  //
+  // Order is causal: power is made, the site is assessed, everything runs
+  // inward. The hero building is the payoff of that sequence, not the
+  // opening statement.
+  windField: aerialStop([-2, 3.2, -10], 180, 15, 16, 30),
+  // Viewed from the far end of the cascade looking back toward the
+  // compound, so the panels lead the eye into the site. The mirrored
+  // angle (-54) would have placed the camera inside the Getty building.
+  solarField: aerialStop([21.4, 0.9, -5.6], 126, 18, 20, 30),
+  // Nearly at ground level, aimed straight up the trace that runs into the
+  // hero's dock side — the pulses travel toward the camera's vanishing
+  // point rather than across the frame.
+  powerConverge: aerialStop([0, 0.9, -3], 178, 12, 10, 34),
+
   // --- Phase 2: the hero. A low gliding approach, then a closer and more
   // dramatic reveal than any supporting building gets.
   jttApproach: aerialStop(COMPOUND_CENTER, 20, 28, 25, 28),
@@ -114,6 +134,9 @@ export const cameraStops = {
 export const cameraSequence = [
   "sitePlan",
   "zoneAEstablish",
+  "windField",
+  "solarField",
+  "powerConverge",
   "jttApproach",
   "jttReveal",
   "jttServerEnter",
