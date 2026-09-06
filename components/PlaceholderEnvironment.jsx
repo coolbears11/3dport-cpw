@@ -15,9 +15,7 @@ import {
   STONE_DEEP,
   INK_DETAIL,
   ACCENT,
-  ACCENT_WIND,
   ACCENT_SOLAR,
-  ACCENT_WATER,
   TRACE,
   SKY,
   GROUND,
@@ -46,9 +44,6 @@ import {
 } from "@/data/worldLayout";
 
 const BLADE_LENGTH = 1.7;
-
-// Which colour a feed pulses, by what generates it.
-const FEED_COLORS = { wind: ACCENT_WIND, solar: ACCENT_SOLAR, water: ACCENT_WATER };
 
 // Tapered blade profile — narrow root, a wide shoulder, tapering to a point
 // at the tip — extruded thin. Built once and shared across every turbine
@@ -464,45 +459,37 @@ export default function PlaceholderEnvironment() {
         <GroundTrace key={i} points={pts.map((p) => new THREE.Vector3(...p))} />
       ))}
 
-      {/* Layer 1 internal feeds: each generation source gathers to the
-          switchyard, colour-coded by what makes the power. Routed through
-          a dogleg so they read as easements following property lines
-          rather than as spokes on a wheel. */}
+      {/* DIAGNOSTIC BUILD — reduced energy network.
+          The scene went from one EnergyPaths instance spanning ~1.6 world
+          units to eight, one of them a 6-waypoint trunk running ~40 units.
+          If EnergyPaths sizes its geometry from path length, that is a
+          far larger increase than 8x, and it is the best explanation for
+          a crash that happens within a second or two on every device.
+
+          So: the feeds and the trunk are drawn here as STATIC traces
+          (cheap drei Lines, already used everywhere else in this scene),
+          and exactly one animated EnergyPaths survives — the short stub
+          into the hero, which is what the site ran with when it worked.
+
+          If this build is stable, EnergyPaths is confirmed and the feeds
+          can come back once it is fixed. If it still crashes, the cause is
+          elsewhere and this rules out a whole branch. */}
       {ZONE_U_FEEDS.map((f, i) => (
-        <EnergyPaths
+        <GroundTrace
           key={`ufeed-${i}`}
-          waypoints={[f.from, f.via, ZONE_U_SWITCHYARD_NODE]}
-          lineColor={TRACE}
-          lineOpacity={0.4}
-          lineWidth={1.1}
-          pulseColor={FEED_COLORS[f.type] ?? ACCENT_WIND}
-          pulses={2}
-          speed={0.05}
+          points={[f.from, f.via, ZONE_U_SWITCHYARD_NODE].map((p) => new THREE.Vector3(...p))}
         />
       ))}
+      <GroundTrace points={TRUNK_WAYPOINTS.map((p) => new THREE.Vector3(...p))} />
 
-      {/* THE TRUNK: Layer 1 to Layer 2. The single longest element in the
-          scene, and the thing that makes two distant zones read as one
-          system. Wider and brighter than the feeds that fill it. */}
-      <EnergyPaths
-        waypoints={TRUNK_WAYPOINTS}
-        lineColor={TRACE}
-        lineOpacity={0.62}
-        lineWidth={2.2}
-        pulseColor={ACCENT}
-        pulses={4}
-        speed={0.055}
-      />
-
-      {/* The last few metres, into the hero building itself. */}
       <EnergyPaths
         waypoints={MERGE_TO_HERO_WAYPOINTS}
         lineColor={TRACE}
         lineOpacity={0.7}
-        lineWidth={2}
+        lineWidth={1.4}
         pulseColor={ACCENT}
-        pulses={2}
-        speed={0.14}
+        pulses={1}
+        speed={0.08}
       />
     </group>
   );
