@@ -32,11 +32,9 @@ export const ZONE_A_BUILDINGS = [
     equipment: [{ type: "vent", offset: [0.5, 0] }],
   },
   {
-    // Lockheed Martin B648 Vestibule — two separate low volumes with
-    // open ground between them, joined by a glazed vestibule link. The
-    // vestibule is the connector between the two buildings, which is why
-    // this reads as a split pair rather than one hall with a bolted-on
-    // annex. Sawtooth industrial roof on both volumes.
+    // Lockheed Martin B648 Vestibule — two separate low volumes joined
+    // by a glazed vestibule link. The vestibule IS the connector between
+    // the two buildings, which is why this reads as a split pair.
     id: "project02",
     position: [-9, -2],
     size: [7.2, 2.4, 4],
@@ -58,16 +56,14 @@ export const ZONE_A_BUILDINGS = [
   },
   {
     // Moxy Hotel — a 7-storey, 163-key hotel on a 0.76-acre lot: two
-    // levels of podium parking with the guestroom block stepping back only
-    // slightly above, and the rooftop bar deck on top. Compact and urban,
-    // not a slender tower — the lot is too small for one.
+    // podium parking levels with the guestroom block stepping back only
+    // slightly above, and the rooftop bar deck on top.
     id: "project03",
     position: [-11, 4.5],
     size: [3.4, 5.2, 3],
     shape: "podium",
-    // Mechanical rides the podium roof in the setback strip. Anything at
-    // offset [0, 0] would sit dead centre on the guestroom roof, in the
-    // middle of the bar deck.
+    // Mechanical rides the podium roof. At offset [0, 0] it sat dead
+    // centre on the guestroom roof, in the middle of the bar deck.
     equipment: [{ type: "ac", offset: [0.9, 0.6] }],
   },
   {
@@ -113,69 +109,29 @@ export const ZONE_A_BUILDINGS = [
   },
 ];
 
-// =====================================================================
-// LAYER 1 — THE POWER FIELD
-// =====================================================================
-// Generation lives in its own region, far west of the compound, with open
-// ground between the two. That distance is the point: power is acquired
-// and developed somewhere else, then carried to the load. Previously all
-// of this sat scattered *inside* the compound, ten units from the hero
-// building, which made generation read as landscaping around the offices
-// rather than as its own layer of the business.
-//
-// Everything here is positioned relative to open ground around
-// [-48, -6]. The trunk line at the bottom of this file is what ties it
-// back to the compound.
-export const ZONE_U_CENTER = [-48, -6];
-
-// Turbines spread widely — a wind field is mostly empty space.
+// Supporting infrastructure scattered through the gaps between clusters so
+// the compound reads as inhabited rather than a handful of boxes.
 export const ZONE_A_TURBINES = [
-  { position: [-58, -14], scale: 1, speed: 1.05, name: "turbine_01_blades" },
-  { position: [-45, -19], scale: 0.92, speed: 0.85, name: "turbine_02_blades" },
-  { position: [-53, 2], scale: 1.08, speed: 1.2, name: "turbine_03_blades" },
-  { position: [-63, -3], scale: 0.88, speed: 0.95, name: "turbine_04_blades" },
+  { position: [-2, -10], scale: 1, speed: 1.05, name: "turbine_01_blades" },
+  { position: [14, 8], scale: 0.9, speed: 0.85, name: "turbine_02_blades" },
+  { position: [-14, -6], scale: 1.05, speed: 1.2, name: "turbine_03_blades" },
 ];
-
-// The solar cascade, stepping away on a diagonal across open ground.
+// A diagonal cascade of solar clusters well off to the east, clear of every
+// building footprint — a compound has room to spread these out rather than
+// hugging one spot next to the anchor building.
 export const ZONE_A_SOLAR_FIELD = {
-  origin: [-41, -15],
-  step: [-4.1, -3.1],
-  // Four clusters, stepped further apart. Six at a tighter step was 270
-  // panel meshes on its own — and a sparse field reads better anyway.
-  count: 4,
+  origin: [15, -1],
+  step: [3.2, -2.3],
+  count: 5,
   rows: 3,
   cols: 3,
   rotationY: Math.PI / 7,
 };
-
-// Two hyperbolic cooling towers — the tallest silhouette on the whole
-// site, and the thing that most immediately reads as "generation."
-export const ZONE_U_COOLING_TOWERS = [
-  { position: [-50, -7], scale: 1 },
-  { position: [-45.4, -8.8], scale: 0.86 },
-];
-
-// The switchyard: where every feed in this zone is collected before it
-// leaves for the compound. Sited at the eastern edge of the power field,
-// pointing at the load.
-export const ZONE_U_SUBSTATION = { position: [-37, -4], rotationY: Math.PI / 16 };
-
-// Storage tanks, off on their own.
-export const ZONE_U_TANKS = [
-  { position: [-57, 5], radius: 1.3, height: 1.7 },
-  { position: [-53.6, 6.4], radius: 0.95, height: 1.35 },
-  { position: [-59.4, 7.4], radius: 0.8, height: 1.1 },
-];
-// Small equipment clutter. Some stays in the compound (buildings need
-// their own gear), some sits out in the power field as switchgear.
 export const ZONE_A_UTILITY_BLOCKS = [
   { position: [4.3, 3.6], size: [1, 1, 1] },
   { position: [-4.3, 2.8], size: [0.9, 0.7, 0.9] },
   { position: [4.6, -4.2], size: [0.85, 0.6, 0.85] },
   { position: [5.3, -5], size: [0.7, 0.9, 0.7] },
-  { position: [-40.5, -7.4], size: [1.1, 0.8, 1.1] },
-  { position: [-42.2, -6.2], size: [0.8, 0.6, 0.8] },
-  { position: [-55.2, -10.6], size: [0.9, 0.7, 0.9] },
 ];
 
 // Small, stylized landscaping accents — trees, shrubs, a footpath, a pond
@@ -221,33 +177,3 @@ export const MERGE_TO_HERO_WAYPOINTS = [
   [0, 0.05, -3],
   [0, 0.05, -1.4],
 ];
-
-// =====================================================================
-// THE TRUNK — Layer 1 to Layer 2
-// =====================================================================
-// The long run from the power field's switchyard to the compound's merge
-// point. Routed as orthogonal doglegs rather than a straight diagonal,
-// the way a real transmission easement follows property lines — and the
-// way the reference sites draw them. This single line is what makes the
-// two zones read as one system instead of two unrelated scenes, and it
-// carries the camera between them.
-export const TRUNK_WAYPOINTS = [
-  [-36.5, 0.05, -4],
-  [-24, 0.05, -4],
-  [-24, 0.05, -6.5],
-  [-9, 0.05, -6.5],
-  [-9, 0.05, -3],
-  [0, 0.05, -3],
-];
-
-// Feeds inside the power field, each gathering to the switchyard before
-// anything leaves for the compound.
-export const ZONE_U_FEEDS = [
-  { from: [-58, 0.05, -14], via: [-46, 0.05, -14], type: "wind" },
-  { from: [-45, 0.05, -19], via: [-41, 0.05, -14], type: "wind" },
-  { from: [-53, 0.05, 2], via: [-44, 0.05, 2], type: "wind" },
-  { from: [-63, 0.05, -3], via: [-44, 0.05, -3], type: "wind" },
-  { from: [-41, 0.05, -15], via: [-39, 0.05, -12], type: "solar" },
-  { from: [-50, 0.05, -7], via: [-42, 0.05, -7], type: "water" },
-];
-export const ZONE_U_SWITCHYARD_NODE = [-36.5, 0.05, -4];
