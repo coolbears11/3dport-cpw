@@ -9,19 +9,7 @@ import DetailedBuilding from "./DetailedBuilding";
 import HeroDataCenter from "./HeroDataCenter";
 import Landscaping from "./Landscaping";
 import GroundDots from "./GroundDots";
-import {
-  STONE,
-  STONE_DARK,
-  STONE_DEEP,
-  INK_DETAIL,
-  ACCENT,
-  ACCENT_WATER,
-  ACCENT_FIBER,
-  TRACE,
-  PLANT,
-  PLANT_DEEP,
-  WATER,
-} from "./sceneKit";
+import { STONE, STONE_DARK, STONE_DEEP, INK_DETAIL, ACCENT, TRACE } from "./sceneKit";
 import {
   ZONE_A_BUILDINGS,
   ZONE_A_TURBINES,
@@ -29,10 +17,6 @@ import {
   ZONE_A_UTILITY_BLOCKS,
   ZONE_A_MERGE_POINT,
   UTILITY_CORRIDORS,
-  ZONE_U_NUCLEAR,
-  ZONE_U_DAM,
-  ZONE_U_CLARIFIERS,
-  ZONE_U_SUBSTATION,
   ZONE_A_TREES,
   ZONE_A_SHRUBS,
   ZONE_A_PATHS,
@@ -174,155 +158,6 @@ function SolarArray({ origin = [0, 0], step = [3, -2], count = 4, rows = 3, cols
   );
 }
 
-// A hyperbolic cooling shell: a flared lower section and a belled upper
-// one meeting at a waist. Two open-ended cylinders approximate the
-// hyperboloid well enough at this scale and cost almost nothing.
-function CoolingTower({ position = [0, 0], scale = 1 }) {
-  const lowerH = 3.4;
-  const upperH = 1.5;
-  const rBase = 1.9;
-  const rWaist = 1.05;
-  const rLip = 1.32;
-  return (
-    <group position={[position[0], 0, position[1]]} scale={scale}>
-      <mesh position={[0, lowerH / 2, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[rWaist, rBase, lowerH, 26, 1, true]} />
-        <meshStandardMaterial color={PLANT} roughness={0.85} side={THREE.DoubleSide} />
-      </mesh>
-      <mesh position={[0, lowerH + upperH / 2, 0]} castShadow>
-        <cylinderGeometry args={[rLip, rWaist, upperH, 26, 1, true]} />
-        <meshStandardMaterial color={PLANT} roughness={0.85} side={THREE.DoubleSide} />
-      </mesh>
-      <mesh position={[0, lowerH + upperH - 0.22, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <circleGeometry args={[rLip * 0.96, 26]} />
-        <meshStandardMaterial color={PLANT_DEEP} roughness={0.95} />
-      </mesh>
-      {Array.from({ length: 8 }).map((_, i) => {
-        const a = (i / 8) * Math.PI * 2;
-        return (
-          <mesh key={i} position={[Math.sin(a) * rBase * 0.95, 0.22, Math.cos(a) * rBase * 0.95]}>
-            <boxGeometry args={[0.13, 0.44, 0.13]} />
-            <meshStandardMaterial color={PLANT_DEEP} roughness={0.7} />
-          </mesh>
-        );
-      })}
-    </group>
-  );
-}
-
-// Reactor containment: a squat cylinder under a hemisphere.
-function ContainmentDome({ position = [0, 0] }) {
-  const r = 1.5;
-  const h = 1.9;
-  return (
-    <group position={[position[0], 0, position[1]]}>
-      <mesh position={[0, h / 2, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[r, r, h, 22]} />
-        <meshStandardMaterial color={PLANT} roughness={0.8} />
-      </mesh>
-      <mesh position={[0, h, 0]} castShadow>
-        <sphereGeometry args={[r, 22, 10, 0, Math.PI * 2, 0, Math.PI / 2]} />
-        <meshStandardMaterial color={PLANT} roughness={0.8} />
-      </mesh>
-      <EdgeBox args={[1.5, 0.7, 1.1]} position={[r + 0.8, 0.35, 0]} color={PLANT_DEEP} edgeOpacity={0.3} />
-    </group>
-  );
-}
-
-// Hydro: a dam wall with buttresses, a spillway notch, and the reservoir
-// water held behind it.
-function HydroDam({ position = [0, 0], width = 12, rotationY = 0 }) {
-  const h = 2.4;
-  const t = 0.85;
-  return (
-    <group position={[position[0], 0, position[1]]} rotation={[0, rotationY, 0]}>
-      {/* reservoir */}
-      <mesh position={[0, 0.06, 5.5]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[width * 1.5, 11]} />
-        <meshStandardMaterial color={WATER} roughness={0.35} metalness={0.15} />
-      </mesh>
-      {/* wall */}
-      <EdgeBox args={[width, h, t]} position={[0, h / 2, 0]} color={PLANT} edgeOpacity={0.3} />
-      {/* downstream buttresses */}
-      {[-0.34, -0.11, 0.11, 0.34].map((f) => (
-        <mesh key={f} position={[width * f, h * 0.34, -t / 2 - 0.42]} castShadow>
-          <boxGeometry args={[0.5, h * 0.68, 0.85]} />
-          <meshStandardMaterial color={PLANT_DEEP} roughness={0.8} />
-        </mesh>
-      ))}
-      {/* spillway chute */}
-      <mesh position={[width * 0.06, h * 0.3, -t / 2 - 1.5]} rotation={[-Math.PI / 7, 0, 0]} castShadow>
-        <boxGeometry args={[2.1, 0.12, 3.1]} />
-        <meshStandardMaterial color={WATER} roughness={0.4} metalness={0.12} />
-      </mesh>
-      {/* crest roadway */}
-      <mesh position={[0, h + 0.07, 0]}>
-        <boxGeometry args={[width + 0.3, 0.14, t + 0.35]} />
-        <meshStandardMaterial color={PLANT_DEEP} roughness={0.75} />
-      </mesh>
-    </group>
-  );
-}
-
-// A circular clarifier: an open tank with a rim wall and a bridge arm
-// across it — the shape that says "water treatment" at a glance.
-function Clarifier({ position = [0, 0], radius = 2 }) {
-  const wall = 0.5;
-  return (
-    <group position={[position[0], 0, position[1]]}>
-      <mesh position={[0, wall / 2, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[radius, radius, wall, 26, 1, true]} />
-        <meshStandardMaterial color={PLANT} roughness={0.85} side={THREE.DoubleSide} />
-      </mesh>
-      <mesh position={[0, 0.07, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <circleGeometry args={[radius * 0.97, 26]} />
-        <meshStandardMaterial color={WATER} roughness={0.35} metalness={0.15} />
-      </mesh>
-      <mesh position={[0, wall + 0.05, 0]}>
-        <boxGeometry args={[radius * 2, 0.09, 0.22]} />
-        <meshStandardMaterial color={PLANT_DEEP} roughness={0.7} />
-      </mesh>
-      <mesh position={[0, wall + 0.24, 0]}>
-        <cylinderGeometry args={[0.14, 0.14, 0.42, 10]} />
-        <meshStandardMaterial color={INK_DETAIL} roughness={0.6} />
-      </mesh>
-    </group>
-  );
-}
-
-// The switchyard: transformer housings under a lattice gantry.
-function Substation({ position = [0, 0], rotationY = 0 }) {
-  return (
-    <group position={[position[0], 0, position[1]]} rotation={[0, rotationY, 0]}>
-      <mesh position={[0, 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[5.6, 3.8]} />
-        <meshStandardMaterial color={PLANT_DEEP} roughness={0.95} />
-      </mesh>
-      {[-1.6, 0, 1.6].map((x) => (
-        <group key={x} position={[x, 0, -0.7]}>
-          <EdgeBox args={[1.05, 0.95, 1.1]} position={[0, 0.48, 0]} color={PLANT} edgeOpacity={0.3} />
-          {[-0.28, 0.28].map((z) => (
-            <mesh key={z} position={[0, 1.16, z]}>
-              <cylinderGeometry args={[0.07, 0.1, 0.44, 8]} />
-              <meshStandardMaterial color={INK_DETAIL} roughness={0.5} />
-            </mesh>
-          ))}
-        </group>
-      ))}
-      {[-2.3, 2.3].map((x) => (
-        <mesh key={x} position={[x, 1.1, 1.2]}>
-          <boxGeometry args={[0.12, 2.2, 0.12]} />
-          <meshStandardMaterial color={INK_DETAIL} roughness={0.55} />
-        </mesh>
-      ))}
-      <mesh position={[0, 2.14, 1.2]}>
-        <boxGeometry args={[4.7, 0.1, 0.1]} />
-        <meshStandardMaterial color={INK_DETAIL} roughness={0.55} />
-      </mesh>
-    </group>
-  );
-}
-
 // A small equipment block — utility clutter that reads as "inhabited site"
 // without adding architectural detail.
 function UtilityBlock({ position, size = [1, 1, 1] }) {
@@ -366,10 +201,7 @@ function offsetPolyline(points, d) {
 //
 // Entirely static. No useFrame, no per-frame allocation: a corridor forty
 // units long costs exactly what a short one does.
-const CORRIDOR_ACCENTS = { power: ACCENT, water: ACCENT_WATER, fiber: ACCENT_FIBER };
-
 function UtilityCorridor({ points, strands = 7, spacing = 0.17, accent = false }) {
-  const accentColor = CORRIDOR_ACCENTS[accent] ?? ACCENT;
   const lines = useMemo(() => {
     const mid = (strands - 1) / 2;
     return Array.from({ length: strands }).map((_, i) => ({
@@ -385,7 +217,7 @@ function UtilityCorridor({ points, strands = 7, spacing = 0.17, accent = false }
         <Line
           key={i}
           points={l.pts}
-          color={l.isAccent ? accentColor : TRACE}
+          color={l.isAccent ? ACCENT : TRACE}
           transparent
           opacity={l.isAccent ? 0.85 : 0.34}
           lineWidth={l.isAccent ? 1.3 : 1}
@@ -397,7 +229,7 @@ function UtilityCorridor({ points, strands = 7, spacing = 0.17, accent = false }
 
 // A large, sparse blueprint-style grid lying flat on the ground, reinforcing
 // the "site plan / infrastructure map" reading from the aerial camera.
-function GroundGrid({ size = 360, divisions = 90, position = [0, 0.01, 0] }) {
+function GroundGrid({ size = 240, divisions = 60, position = [0, 0.01, 0] }) {
   const grid = useMemo(() => {
     const g = new THREE.GridHelper(size, divisions, STONE_DEEP, STONE_DEEP);
     g.material.transparent = true;
@@ -424,9 +256,7 @@ export default function PlaceholderEnvironment() {
       <color attach="background" args={[STONE]} />
       {/* Generation now sits ~34 units west, so both zones have to stay
           legible from one wide isometric shot. */}
-      {/* The field now sits ~60-95 units west, so fog has to reach far
-          enough that the opening isometric shot is not a wall of haze. */}
-      <fog attach="fog" args={[STONE, 150, 400]} />
+      <fog attach="fog" args={[STONE, 95, 260]} />
 
       <ambientLight intensity={0.65} />
       <hemisphereLight args={["#ffffff", STONE_DEEP, 0.5]} />
@@ -445,12 +275,12 @@ export default function PlaceholderEnvironment() {
       {/* ground — sized generously beyond the camera's route so no edge is
           ever visible from the aerial framing. */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
-        <planeGeometry args={[340, 220]} />
+        <planeGeometry args={[230, 200]} />
         <meshStandardMaterial color={STONE} roughness={0.95} />
       </mesh>
       <GroundGrid />
       <GroundDots width={70} depth={70} center={[0, 0]} />
-      <GroundDots width={54} depth={46} center={[-78, -8]} />
+      <GroundDots width={50} depth={44} center={[-28, -7]} />
 
       {/* future .glb integration point: replace everything below with
           <InfrastructureModel /> loading /public/models/infrastructure.glb
@@ -488,19 +318,9 @@ export default function PlaceholderEnvironment() {
           />
         )
       )}
-      {/* --- LAYER 1: the power field, far west of the compound --- */}
       {ZONE_A_TURBINES.map((t) => (
         <Turbine key={t.name} position={t.position} scale={t.scale} speed={t.speed} name={t.name} />
       ))}
-      {ZONE_U_NUCLEAR.towers.map((c, i) => (
-        <CoolingTower key={i} position={c.position} scale={c.scale} />
-      ))}
-      <ContainmentDome position={ZONE_U_NUCLEAR.containment.position} />
-      <HydroDam position={ZONE_U_DAM.position} width={ZONE_U_DAM.width} rotationY={ZONE_U_DAM.rotationY} />
-      {ZONE_U_CLARIFIERS.map((c, i) => (
-        <Clarifier key={i} position={c.position} radius={c.radius} />
-      ))}
-      <Substation position={ZONE_U_SUBSTATION.position} rotationY={ZONE_U_SUBSTATION.rotationY} />
       <SolarArray
         origin={ZONE_A_SOLAR_FIELD.origin}
         step={ZONE_A_SOLAR_FIELD.step}
