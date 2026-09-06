@@ -26,6 +26,10 @@
 // Hierarchy is still carried by distance and screen time (the hero is
 // closest and gets the most beats), never by cropping.
 const DEG = Math.PI / 180;
+
+// The fixed isometric setup used for the whole of Layer 1.
+const ISO_AZ = 45;
+const ISO_PITCH = 30;
 function aerialStop(target, azimuthDeg, distance, pitchDeg, fov) {
   const az = azimuthDeg * DEG;
   const pitch = pitchDeg * DEG;
@@ -59,9 +63,17 @@ export const cameraStops = {
   // --- Phase 1: the site plan. High, near-vertical, slightly long lens —
   // the ground grid and the traces between buildings read as linework
   // before anything reads as architecture.
-  sitePlan: aerialStop([0, 0.5, 1], 0, 54, 76, 23),
+  // ISOMETRIC. Layer 1 is shot at ONE fixed angle — 30 degrees of
+  // elevation, 45 of rotation, on a long lens so perspective flattens
+  // toward orthographic. The world moves through the frame; the camera
+  // does not swing around. That fixed angle is most of why the reference
+  // sites read the way they do, and why an earlier near-top-down opener
+  // (78 degrees) felt like a different kind of site entirely.
+  sitePlan: aerialStop([-15, 0.5, -3], ISO_AZ, 74, ISO_PITCH, 20),
   // Descend into perspective. Same compound, now with facades.
-  zoneAEstablish: aerialStop([0, 0.5, 2], 8, 42, 34, 27),
+  // Arrival at Layer 2, still isometric — the handover point. From here
+  // on the camera drops into perspective and starts varying per project.
+  zoneAEstablish: aerialStop([0, 0.5, 1], ISO_AZ, 44, ISO_PITCH, 24),
 
   // Viewed from the far end of the cascade looking back toward the
   // compound, so the panels lead the eye into the site. The mirrored
@@ -72,12 +84,13 @@ export const cameraStops = {
   // been in this scene, the camera just never stopped on them. Low and
   // close, at or near hub height, because generation equipment only reads
   // as large from underneath.
-  windField: aerialStop([-2, 3.2, -10], 180, 15, 16, 30),
-  solarField: aerialStop([19, 0.9, -5], 120, 19, 21, 29),
-  // Almost at ground level, aimed straight up the trace running into the
-  // hero's dock side, so the pulse travels toward the vanishing point
-  // rather than across the frame.
-  powerConverge: aerialStop([0, 0.9, -3], 178, 12, 10, 34),
+  windField: aerialStop([-30, 2.6, -12], ISO_AZ, 28, ISO_PITCH, 22),
+  // Pulled back to 30: at 26 the camera sat directly over the Lockheed
+  // building, which would have crept into the bottom of frame.
+  solarField: aerialStop([-26, 0.8, -17], ISO_AZ, 30, ISO_PITCH, 22),
+  // Riding the trunk corridor east. Same isometric angle, so this reads
+  // as travel along the band rather than as a new camera setup.
+  powerConverge: aerialStop([-17, 0.8, -5], ISO_AZ, 30, ISO_PITCH, 23),
 
   // --- Phase 2: the hero. A low gliding approach, then a closer and more
   // dramatic reveal than any supporting building gets.

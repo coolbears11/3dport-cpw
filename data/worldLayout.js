@@ -111,18 +111,23 @@ export const ZONE_A_BUILDINGS = [
 
 // Supporting infrastructure scattered through the gaps between clusters so
 // the compound reads as inhabited rather than a handful of boxes.
+// Generation sits WEST of the compound with open ground between, rather
+// than scattered among the buildings. On the reference sites the power
+// layer is its own place and the distance to the load is part of the
+// picture; turbines ten units from the hero read as landscaping.
 export const ZONE_A_TURBINES = [
-  { position: [-2, -10], scale: 1, speed: 1.05, name: "turbine_01_blades" },
-  { position: [14, 8], scale: 0.9, speed: 0.85, name: "turbine_02_blades" },
-  { position: [-14, -6], scale: 1.05, speed: 1.2, name: "turbine_03_blades" },
+  { position: [-30, -12], scale: 1, speed: 1.05, name: "turbine_01_blades" },
+  { position: [-24, -19], scale: 0.92, speed: 0.85, name: "turbine_02_blades" },
+  { position: [-37, -5], scale: 1.08, speed: 1.2, name: "turbine_03_blades" },
+  { position: [-29, 4], scale: 0.88, speed: 0.95, name: "turbine_04_blades" },
 ];
 // A diagonal cascade of solar clusters well off to the east, clear of every
 // building footprint — a compound has room to spread these out rather than
 // hugging one spot next to the anchor building.
 export const ZONE_A_SOLAR_FIELD = {
-  origin: [15, -1],
-  step: [3.2, -2.3],
-  count: 5,
+  origin: [-21, -13],
+  step: [-3.9, -2.9],
+  count: 4,
   rows: 3,
   cols: 3,
   rotationY: Math.PI / 7,
@@ -172,6 +177,55 @@ export const ZONE_A_BRIDGE = { position: [-6, -6], length: 2.6, rotationY: Math.
 // a short animated stub then carries a green pulse the rest of the way in,
 // visually reading as "everything feeds the hero." Nothing travels beyond
 // this single compound anymore.
+// =====================================================================
+// UTILITY CORRIDORS
+// =====================================================================
+// The banded multi-strand runs that carry the site's services. Each is
+// drawn as several thin parallel lines rather than one, which is what
+// gives the reference sites their distinctive ribbon look, and each has a
+// single accent strand picked out along it. Routed as orthogonal doglegs,
+// the way an easement follows property lines.
+//
+// These are STATIC geometry — no per-frame animation — so they are cheap
+// no matter how long the run is.
+export const UTILITY_CORRIDORS = [
+  {
+    // The main trunk: power field to the compound's merge point.
+    id: "trunk",
+    strands: 8,
+    accent: true,
+    points: [
+      [-34, 0.05, -7],
+      [-19, 0.05, -7],
+      [-19, 0.05, -3],
+      [0, 0.05, -3],
+    ],
+  },
+  {
+    // A secondary service run entering the compound from the north-west.
+    id: "service-nw",
+    strands: 6,
+    accent: false,
+    points: [
+      [-33, 0.05, 9],
+      [-15, 0.05, 9],
+      [-15, 0.05, 5],
+      [-5, 0.05, 5],
+    ],
+  },
+  {
+    // An east corridor crossing behind the supporting buildings.
+    id: "east-spur",
+    strands: 6,
+    accent: true,
+    points: [
+      [20, 0.05, -16],
+      [20, 0.05, 7],
+      [9, 0.05, 7],
+    ],
+  },
+];
+
 export const ZONE_A_MERGE_POINT = [0, 0.05, -3];
 export const MERGE_TO_HERO_WAYPOINTS = [
   [0, 0.05, -3],
