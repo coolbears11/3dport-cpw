@@ -59,7 +59,10 @@ export const cameraStops = {
   // --- Phase 1: the site plan. High, near-vertical, slightly long lens —
   // the ground grid and the traces between buildings read as linework
   // before anything reads as architecture.
-  sitePlan: aerialStop([0, 0.5, 1], 0, 54, 76, 23),
+  // Opens over the WHOLE system — both zones in one frame, seen almost
+  // straight down, so the first thing read is the relationship between
+  // generation and load.
+  sitePlan: aerialStop([-24, 0.5, -3], 0, 92, 78, 26),
   // Descend into perspective. Same compound, now with facades.
   zoneAEstablish: aerialStop([0, 0.5, 2], 8, 42, 34, 27),
 
@@ -73,13 +76,27 @@ export const cameraStops = {
   // Order is causal: power is made, the site is assessed, everything runs
   // inward. The hero building is the payoff of that sequence, not the
   // opening statement.
-  windField: aerialStop([-2, 3.2, -10], 180, 15, 16, 30),
+  // Layer 1 establishing: high and wide over the power field, far enough
+  // out that the emptiness around the equipment is part of the picture.
+  powerFieldEstablish: aerialStop([-49, 1, -7], 30, 52, 40, 26),
+  // Down among the turbines at close to hub height. Generation equipment
+  // only feels large from underneath.
+  windField: aerialStop([-55, 3.4, -8], 128, 17, 15, 30),
+  // The cooling towers, the tallest silhouette on the site.
+  coolingTowers: aerialStop([-47.7, 2.6, -7.9], 66, 16, 17, 29),
   // Viewed from the far end of the cascade looking back toward the
   // compound, so the panels lead the eye into the site. The mirrored
   // angle (-54) would have placed the camera inside the Getty building.
-  solarField: aerialStop([21.4, 0.9, -5.6], 126, 18, 20, 30),
-  // Nearly at ground level, aimed straight up the trace that runs into the
-  // hero's dock side — the pulses travel toward the camera's vanishing
+  solarField: aerialStop([-49, 0.9, -22], -46, 20, 21, 30),
+  // The switchyard, where the whole field collects before it leaves.
+  switchyard: aerialStop([-37, 1.2, -4], -35, 14, 22, 29),
+  // THE TRUNK RUN — the transition between layers. The camera sits low
+  // over the middle of the easement, the power field receding behind and
+  // the compound resolving out of the haze ahead. This is the only shot
+  // that contains both zones.
+  trunkRun: aerialStop([-22, 1.2, -5.4], 96, 22, 16, 32),
+  // Arrival: nearly at ground level, aimed straight up the last stretch
+  // into the hero's dock side, so the pulses travel toward the vanishing
   // point rather than across the frame.
   powerConverge: aerialStop([0, 0.9, -3], 178, 12, 10, 34),
 
@@ -133,9 +150,13 @@ export const cameraStops = {
 // repeated the establishing framing immediately before the supporting run.
 export const cameraSequence = [
   "sitePlan",
-  "zoneAEstablish",
+  "powerFieldEstablish",
   "windField",
+  "coolingTowers",
   "solarField",
+  "switchyard",
+  "trunkRun",
+  "zoneAEstablish",
   "powerConverge",
   "jttApproach",
   "jttReveal",

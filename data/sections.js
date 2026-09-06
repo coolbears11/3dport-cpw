@@ -25,12 +25,12 @@ export const sections = [
   // render them as a statement rather than a project card.
   {
     id: "sys-generation",
-    cameraStop: "windField",
+    cameraStop: "powerFieldEstablish",
     projects: [
       {
         id: "sys-generation-note",
         kind: "note",
-        category: "System / Generation",
+        category: "Layer 1.0 / Power",
         title: "Power & Capacity",
         description:
           "150 MW of available capacity confirmed with Duke Energy on the target parcel — no required utility upgrades, and expansion potential beyond 300 MW.",
@@ -45,7 +45,7 @@ export const sections = [
       {
         id: "sys-site-note",
         kind: "note",
-        category: "System / Site",
+        category: "Layer 1.0 / Site",
         title: "Land & Buildability",
         description:
           "Owner documentation, engineering plans, ALTA surveys and geotechnical reports reviewed against substation proximity, interconnection timelines, zoning and water access.",
@@ -55,16 +55,31 @@ export const sections = [
   },
   {
     id: "sys-interconnection",
-    cameraStop: "powerConverge",
+    cameraStop: "trunkRun",
     projects: [
       {
         id: "sys-interconnection-note",
         kind: "note",
-        category: "System / Interconnection",
-        title: "Everything Feeds the Hall",
+        category: "Layer 1.5 / Interconnection",
+        title: "The Distance Is the Work",
         description:
-          "Fiber backbone proximity for low-latency compute, water access sized for liquid cooling. Every trace on this site terminates at one building.",
+          "Generation is developed in one place and consumed in another. Interconnection timelines, easements and substation proximity are what decide whether the two ever meet \u2014 and they are the first thing I look at on a parcel.",
         alignment: "center",
+      },
+    ],
+  },
+  {
+    id: "sys-layer2",
+    cameraStop: "zoneAEstablish",
+    projects: [
+      {
+        id: "sys-layer2-note",
+        kind: "note",
+        category: "Layer 2.0 / Built Work",
+        title: "Where It Gets Built",
+        description:
+          "Five projects, each estimated or engineered on the owner\u0027s side or the contractor\u0027s. Preconstruction, quantity takeoffs, conceptual budgets, and the feasibility that comes before all of it.",
+        alignment: "left",
       },
     ],
   },
