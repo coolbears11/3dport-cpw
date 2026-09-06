@@ -67,6 +67,18 @@ export const cameraStops = {
   // compound, so the panels lead the eye into the site. The mirrored
   // angle (-54) would have placed the camera inside the Getty building.
 
+  // --- Phase 1b: the utilities get their own beats. NO new geometry is
+  // involved — the turbines, solar cascade and ground traces have always
+  // been in this scene, the camera just never stopped on them. Low and
+  // close, at or near hub height, because generation equipment only reads
+  // as large from underneath.
+  windField: aerialStop([-2, 3.2, -10], 180, 15, 16, 30),
+  solarField: aerialStop([19, 0.9, -5], 120, 19, 21, 29),
+  // Almost at ground level, aimed straight up the trace running into the
+  // hero's dock side, so the pulse travels toward the vanishing point
+  // rather than across the frame.
+  powerConverge: aerialStop([0, 0.9, -3], 178, 12, 10, 34),
+
   // --- Phase 2: the hero. A low gliding approach, then a closer and more
   // dramatic reveal than any supporting building gets.
   jttApproach: aerialStop(COMPOUND_CENTER, 20, 28, 25, 28),
@@ -118,6 +130,9 @@ export const cameraStops = {
 export const cameraSequence = [
   "sitePlan",
   "zoneAEstablish",
+  "windField",
+  "solarField",
+  "powerConverge",
   "jttApproach",
   "jttReveal",
   "jttServerEnter",
