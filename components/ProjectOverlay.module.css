@@ -8,6 +8,27 @@
   margin-bottom: var(--space-3);
 }
 
+/* A system beat: no image, no meta, no CTA. Larger type than a project
+   card so these read as chapter breaks in the scroll. */
+.noteCard {
+  max-width: 32rem;
+}
+
+.noteTitle {
+  font-size: var(--fs-h2);
+  font-weight: 500;
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  margin-bottom: var(--space-4);
+}
+
+.noteCard .description {
+  font-size: var(--fs-lede);
+  line-height: 1.5;
+  margin-bottom: 0;
+  max-width: 27rem;
+}
+
 .title {
   font-size: var(--fs-h3);
   font-weight: 500;
@@ -86,5 +107,8 @@
   }
   .media {
     width: 8rem;
+  }
+  .noteCard {
+    max-width: 20rem;
   }
 }
