@@ -212,8 +212,8 @@ function CoolingTower({ position = [0, 0], scale = 1 }) {
         <meshStandardMaterial color={PLANT_DEEP} roughness={0.95} />
       </mesh>
       {/* base skirt columns */}
-      {Array.from({ length: 12 }).map((_, i) => {
-        const a = (i / 12) * Math.PI * 2;
+      {Array.from({ length: 8 }).map((_, i) => {
+        const a = (i / 8) * Math.PI * 2;
         return (
           <mesh key={i} position={[Math.sin(a) * rBase * 0.96, 0.22, Math.cos(a) * rBase * 0.96]}>
             <boxGeometry args={[0.12, 0.44, 0.12]} />
@@ -276,8 +276,8 @@ function Substation({ position = [0, 0], rotationY = 0 }) {
         </mesh>
       ))}
       {/* perimeter fence posts */}
-      {Array.from({ length: 14 }).map((_, i) => {
-        const t = i / 14;
+      {Array.from({ length: 10 }).map((_, i) => {
+        const t = i / 10;
         const per = 2 * (padW + padD);
         const d = t * per;
         let x, z;
@@ -336,7 +336,7 @@ function GroundTrace({ points }) {
 
 // A large, sparse blueprint-style grid lying flat on the ground, reinforcing
 // the "site plan / infrastructure map" reading from the aerial camera.
-function GroundGrid({ size = 280, divisions = 70, position = [0, 0.01, 0] }) {
+function GroundGrid({ size = 280, divisions = 52, position = [0, 0.01, 0] }) {
   const grid = useMemo(() => {
     const g = new THREE.GridHelper(size, divisions, GRID, GRID);
     g.material.transparent = true;
@@ -371,7 +371,7 @@ export default function PlaceholderEnvironment() {
         position={[24, 34, 18]}
         intensity={1.1}
         castShadow
-        shadow-mapSize={[2048, 2048]}
+        shadow-mapSize={[1024, 1024]}
         shadow-camera-left={-30}
         shadow-camera-right={30}
         shadow-camera-top={30}
@@ -386,10 +386,11 @@ export default function PlaceholderEnvironment() {
         <meshStandardMaterial color={GROUND} roughness={0.95} />
       </mesh>
       <GroundGrid />
-      <GroundDots width={70} depth={70} center={[0, 0]} />
-      <GroundDots width={60} depth={54} center={[-50, -6]} />
-      {/* the empty ground the trunk crosses — sparse, but not blank */}
-      <GroundDots width={44} depth={26} center={[-22, -5]} />
+      {/* Two dot fields, not three. Each one is a large per-point draw and
+          tripling them was a meaningful share of the memory blowup. The
+          ground the trunk crosses is meant to read as empty anyway. */}
+      <GroundDots width={64} depth={64} center={[0, 0]} />
+      <GroundDots width={46} depth={40} center={[-50, -6]} />
 
       {/* future .glb integration point: replace everything below with
           <InfrastructureModel /> loading /public/models/infrastructure.glb

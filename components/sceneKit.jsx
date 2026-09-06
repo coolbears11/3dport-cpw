@@ -5,7 +5,7 @@
 // Landscaping) so the vector/blueprint look — solid flat panels with a
 // crisp dark edge outline — stays consistent instead of drifting per file.
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import * as THREE from "three";
 
 // A clean white/off-white "abstract infrastructure model" palette — tonal
@@ -67,6 +67,22 @@ export function EdgeBox({
   name,
 }) {
   const geometry = useMemo(() => new THREE.BoxGeometry(...args), [args.join(",")]);
+  // The edge outline MUST be memoised alongside the box. Built inline in
+  // the JSX it was reallocated on every single render and never released,
+  // so each EdgeBox leaked a GPU buffer per render. With ~70 of them live
+  // in a scroll-driven scene that re-renders constantly, memory climbed
+  // until the browser tab was killed — the page would load correctly and
+  // then die a few seconds later.
+  const edges = useMemo(() => new THREE.EdgesGeometry(geometry), [geometry]);
+  // Release both when this box unmounts; three.js does not garbage collect
+  // GPU resources on its own.
+  useEffect(() => {
+    return () => {
+      geometry.dispose();
+      edges.dispose();
+    };
+  }, [geometry, edges]);
+
   return (
     <group position={position} rotation={rotation}>
       <mesh geometry={geometry} castShadow receiveShadow name={name}>
@@ -78,7 +94,7 @@ export function EdgeBox({
           opacity={opacity}
         />
       </mesh>
-      <lineSegments geometry={new THREE.EdgesGeometry(geometry)}>
+      <lineSegments geometry={edges}>
         <lineBasicMaterial color={INK} transparent opacity={edgeOpacity} />
       </lineSegments>
     </group>
