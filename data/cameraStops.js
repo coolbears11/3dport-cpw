@@ -69,7 +69,7 @@ export const cameraStops = {
   // does not swing around. That fixed angle is most of why the reference
   // sites read the way they do, and why an earlier near-top-down opener
   // (78 degrees) felt like a different kind of site entirely.
-  sitePlan: aerialStop([-15, 0.5, -3], ISO_AZ, 74, ISO_PITCH, 20),
+  sitePlan: aerialStop([-82, 1, -6], ISO_AZ, 46, ISO_PITCH, 22),
   // Descend into perspective. Same compound, now with facades.
   // Arrival at Layer 2, still isometric — the handover point. From here
   // on the camera drops into perspective and starts varying per project.
@@ -84,13 +84,18 @@ export const cameraStops = {
   // been in this scene, the camera just never stopped on them. Low and
   // close, at or near hub height, because generation equipment only reads
   // as large from underneath.
-  windField: aerialStop([-30, 2.6, -12], ISO_AZ, 28, ISO_PITCH, 22),
-  // Pulled back to 30: at 26 the camera sat directly over the Lockheed
-  // building, which would have crept into the bottom of frame.
-  solarField: aerialStop([-26, 0.8, -17], ISO_AZ, 30, ISO_PITCH, 22),
-  // Riding the trunk corridor east. Same isometric angle, so this reads
-  // as travel along the band rather than as a new camera setup.
-  powerConverge: aerialStop([-17, 0.8, -5], ISO_AZ, 30, ISO_PITCH, 23),
+  nuclear: aerialStop([-86, 2.4, -7], ISO_AZ, 26, ISO_PITCH, 22),
+  hydro: aerialStop([-79, 1.2, 13], ISO_AZ, 28, ISO_PITCH, 23),
+  windField: aerialStop([-91, 2.6, -14], ISO_AZ, 30, ISO_PITCH, 22),
+  waterTreatment: aerialStop([-70, 0.9, -20], ISO_AZ, 26, ISO_PITCH, 22),
+  solarField: aerialStop([-66, 0.8, -14], ISO_AZ, 28, ISO_PITCH, 22),
+  switchyard: aerialStop([-57, 1.2, -7], ISO_AZ, 26, ISO_PITCH, 22),
+  // Riding the corridors east across empty ground. Two beats, same
+  // isometric angle throughout, so it reads as travel along the bands
+  // rather than as a series of new camera setups. This is the stretch
+  // where nothing exists but the lines and the distance they cover.
+  trunkRunWest: aerialStop([-40, 0.8, -8], ISO_AZ, 34, ISO_PITCH, 24),
+  powerConverge: aerialStop([-16, 0.8, -6], ISO_AZ, 32, ISO_PITCH, 24),
 
   // --- Phase 2: the hero. A low gliding approach, then a closer and more
   // dramatic reveal than any supporting building gets.
@@ -142,10 +147,15 @@ export const cameraStops = {
 // repeated the establishing framing immediately before the supporting run.
 export const cameraSequence = [
   "sitePlan",
-  "zoneAEstablish",
+  "nuclear",
+  "hydro",
   "windField",
+  "waterTreatment",
   "solarField",
+  "switchyard",
+  "trunkRunWest",
   "powerConverge",
+  "zoneAEstablish",
   "jttApproach",
   "jttReveal",
   "jttServerEnter",
