@@ -94,18 +94,18 @@ export const sections = [
         role: "Preconstruction Estimating",
         employer: "Swinerton — General Contractor",
         description:
-          "Conceptual budget for a new education building on the Getty Museum campus — a CMAR pursuit priced from 50% schematic design drawings while the project was still being competed for.",
+          "Conceptual budget for the Getty Core project, a new education building on the Getty campus, priced from a 50% schematic design set for a CMAR pursuit that had not yet been awarded.",
         year: "2026",
         media: "/images/projects/getty-core.jpg",
         alignment: "right",
         detail: {
           summary:
-            "An active CMAR pursuit during a Swinerton internship in Los Angeles: a new education building on the Getty Museum campus. The project had not been awarded — the team was assembling a conceptual budget for the owner while competing for the job, working from a 50% schematic design set that left much of the scope still undefined.",
+            "Swinerton's preconstruction submission for the Getty Core project, a new education building on the Getty campus. The contract had not been awarded and the design was only at 50% schematic, so the job was to give the owner a credible number anyway: take off what the drawings actually supported, price the rest by conceptual methods, and carry alternates for the scopes still open.",
           highlights: [
-            "Produced quantity takeoffs across a wide range of trades from the 50% SD set, working alongside the OCLA estimating team.",
-            "Built the conceptual budget using conceptual estimating methods and historical pricing to cover scope the schematic drawings had not yet resolved.",
-            "Developed bid alternates and identified subcontractors to carry scopes that were not yet defined in the design.",
-            "Ran takeoffs in On-Screen Takeoff and Bluebeam, and built MasterFormat and UniFormat estimates in Destini.",
+            "Ran quantity takeoffs across a wide range of trades directly from the 50% schematic design set, using On-Screen Takeoff and Bluebeam.",
+            "Priced the scope the schematic drawings had not yet resolved using conceptual estimating methods and historical cost data.",
+            "Developed bid alternates and identified subcontractors to carry the scopes still undefined at 50% SD.",
+            "Assembled the results into the conceptual budget carried in Swinerton's CMAR proposal to the owner.",
           ],
           gallery: ["/images/projects/swinerton-team.jpg"],
         },
