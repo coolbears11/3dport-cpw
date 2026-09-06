@@ -8,11 +8,15 @@
 import { useMemo } from "react";
 import * as THREE from "three";
 
-// A clean white/off-white "abstract infrastructure model" palette — tonal
-// variation stays subtle (a few close-value greys) so depth reads from
-// shadows and lighting rather than dark contrasting surfaces. ACCENT green
-// is reserved exclusively for the energy pulses/LEDs; every other element
-// — including landscaping — stays inside this monochrome family.
+// The models stay pale — the white "abstract infrastructure model" look is
+// the identity of this site and it doesn't change. What changed is the
+// GROUND the models stand on: sky, earth and site grid are now near-black,
+// so the pale massing reads as lit objects on a dark site rather than
+// beige-on-beige. High contrast, and it lets the energy pulses actually
+// glow instead of sitting flat.
+//
+// Building surfaces — unchanged, deliberately. Depth still comes from
+// shadow and lighting across a few close values, not from dark panels.
 export const STONE = "#ece8e0";
 export const STONE_DARK = "#ddd8cc";
 export const STONE_DEEP = "#cdc7b9";
@@ -21,13 +25,30 @@ export const INK = "#14161a";
 // mullions, rack slot lines) — legible without reading as a dark surface.
 // Pure INK is reserved for thin, low-opacity outline strokes only.
 export const INK_DETAIL = "#a39c8c";
-export const ACCENT = "#3ef07f";
-export const TRACE = "#c2bcac";
 export const GLASS = "#e9eae4";
-export const FOLIAGE = "#ddd8cb";
-export const FOLIAGE_DARK = "#cac4b4";
-export const WATER = "#e2e4de";
-export const PATH = "#f2efe7";
+
+// The site: sky, earth, survey grid. These used to be STONE, which is why
+// everything sat in one tonal register.
+export const SKY = "#0b0c0d";
+export const GROUND = "#111316";
+export const GRID = "#2b313a";
+
+// Energy. ACCENT green stays the primary pulse colour, but generation
+// sources now read as distinct feeds converging on the hall: cool blue off
+// the turbines, warm amber off the solar field, green on the final run
+// into the building. That's the only place colour is allowed to shout.
+export const ACCENT = "#3ef07f";
+export const ACCENT_WIND = "#79d2ff";
+export const ACCENT_SOLAR = "#ffb454";
+export const TRACE = "#46515e";
+export const SOLAR_PANEL = "#43607a";
+
+// Landscaping — a muted sage rather than off-white, so planting reads as
+// planting against the dark ground instead of glowing like a building.
+export const FOLIAGE = "#79876c";
+export const FOLIAGE_DARK = "#5c6853";
+export const WATER = "#1b2933";
+export const PATH = "#262b31";
 
 // Shared flat-panel look: a solid box plus a crisp dark edge outline — what
 // reads as "simple modern vector" at a distance instead of relying on

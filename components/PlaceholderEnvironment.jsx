@@ -9,7 +9,19 @@ import DetailedBuilding from "./DetailedBuilding";
 import HeroDataCenter from "./HeroDataCenter";
 import Landscaping from "./Landscaping";
 import GroundDots from "./GroundDots";
-import { STONE, STONE_DARK, STONE_DEEP, INK_DETAIL, ACCENT, TRACE } from "./sceneKit";
+import {
+  STONE,
+  STONE_DEEP,
+  INK_DETAIL,
+  ACCENT,
+  ACCENT_WIND,
+  ACCENT_SOLAR,
+  TRACE,
+  SKY,
+  GROUND,
+  GRID,
+  SOLAR_PANEL,
+} from "./sceneKit";
 import {
   ZONE_A_BUILDINGS,
   ZONE_A_TURBINES,
@@ -103,17 +115,17 @@ function SolarPanel({ position }) {
     <group position={[position[0], 0.4, position[1]]} rotation={[-Math.PI / 5, 0, 0]}>
       <mesh castShadow receiveShadow>
         <boxGeometry args={[0.9, 0.04, 0.55]} />
-        <meshStandardMaterial color={STONE_DARK} roughness={0.3} metalness={0.2} />
+        <meshStandardMaterial color={SOLAR_PANEL} roughness={0.28} metalness={0.35} />
       </mesh>
       {[-0.28, 0, 0.28].map((x) => (
         <mesh key={x} position={[x, 0.024, 0]}>
           <boxGeometry args={[0.012, 0.01, 0.53]} />
-          <meshStandardMaterial color={INK_DETAIL} transparent opacity={0.32} />
+          <meshStandardMaterial color={ACCENT_SOLAR} transparent opacity={0.3} />
         </mesh>
       ))}
       <mesh position={[0, 0.024, 0]}>
         <boxGeometry args={[0.88, 0.01, 0.012]} />
-        <meshStandardMaterial color={INK_DETAIL} transparent opacity={0.32} />
+        <meshStandardMaterial color={ACCENT_SOLAR} transparent opacity={0.3} />
       </mesh>
     </group>
   );
@@ -179,9 +191,9 @@ function GroundTrace({ points }) {
 // the "site plan / infrastructure map" reading from the aerial camera.
 function GroundGrid({ size = 180, divisions = 48, position = [0, 0.01, 0] }) {
   const grid = useMemo(() => {
-    const g = new THREE.GridHelper(size, divisions, STONE_DEEP, STONE_DEEP);
+    const g = new THREE.GridHelper(size, divisions, GRID, GRID);
     g.material.transparent = true;
-    g.material.opacity = 0.16;
+    g.material.opacity = 0.55;
     g.position.set(...position);
     return g;
   }, [size, divisions, position]);
@@ -201,11 +213,13 @@ export default function PlaceholderEnvironment() {
 
   return (
     <group>
-      <color attach="background" args={[STONE]} />
-      <fog attach="fog" args={[STONE, 50, 150]} />
+      <color attach="background" args={[SKY]} />
+      <fog attach="fog" args={[SKY, 55, 170]} />
 
-      <ambientLight intensity={0.65} />
-      <hemisphereLight args={["#ffffff", STONE_DEEP, 0.5]} />
+      {/* Lighting had to come up a touch: on a dark ground there is far
+          less bounce back into the undersides of the massing. */}
+      <ambientLight intensity={0.72} />
+      <hemisphereLight args={["#ffffff", GROUND, 0.55]} />
       <directionalLight
         position={[24, 34, 18]}
         intensity={1.1}
@@ -222,7 +236,7 @@ export default function PlaceholderEnvironment() {
           ever visible from the aerial framing. */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[160, 160]} />
-        <meshStandardMaterial color={STONE} roughness={0.95} />
+        <meshStandardMaterial color={GROUND} roughness={0.95} />
       </mesh>
       <GroundGrid />
       <GroundDots width={70} depth={70} center={[0, 0]} />
@@ -285,20 +299,51 @@ export default function PlaceholderEnvironment() {
         bridge={ZONE_A_BRIDGE}
       />
 
-      {/* static neutral traces linking each building to the compound's
-          merge point, plus a short animated stub carrying the signal the
-          rest of the way into the hero building — "everything feeds JTT." */}
+      {/* Buildings connect to the merge point with static neutral traces —
+          they consume, they don't generate. */}
       {zoneATraceWaypoints.map((pts, i) => (
         <GroundTrace key={i} points={pts.map((p) => new THREE.Vector3(...p))} />
       ))}
+
+      {/* Generation, by contrast, is ALIVE. Each turbine runs a live feed
+          into the merge point in cool blue, and the solar field runs one in
+          warm amber, so the site reads as power being made out at the
+          edges and travelling inward. These used to be nothing at all —
+          the turbines and panels sat there unconnected while a single
+          short stub near the hero did all the narrative work. */}
+      {ZONE_A_TURBINES.map((t) => (
+        <EnergyPaths
+          key={`feed-${t.name}`}
+          waypoints={[[t.position[0], 0.05, t.position[1]], ZONE_A_MERGE_POINT]}
+          lineColor={TRACE}
+          lineOpacity={0.42}
+          lineWidth={1.2}
+          pulseColor={ACCENT_WIND}
+          pulses={2}
+          speed={0.045}
+        />
+      ))}
+      <EnergyPaths
+        waypoints={[[ZONE_A_SOLAR_FIELD.origin[0], 0.05, ZONE_A_SOLAR_FIELD.origin[1]], ZONE_A_MERGE_POINT]}
+        lineColor={TRACE}
+        lineOpacity={0.42}
+        lineWidth={1.2}
+        pulseColor={ACCENT_SOLAR}
+        pulses={2}
+        speed={0.05}
+      />
+
+      {/* The final run into the hero building: everything that arrived at
+          the merge point goes in here. Brighter and faster than the feeds,
+          because this is the payoff of the whole diagram. */}
       <EnergyPaths
         waypoints={MERGE_TO_HERO_WAYPOINTS}
         lineColor={TRACE}
-        lineOpacity={0.5}
-        lineWidth={1.4}
+        lineOpacity={0.7}
+        lineWidth={2}
         pulseColor={ACCENT}
-        pulses={1}
-        speed={0.08}
+        pulses={3}
+        speed={0.14}
       />
     </group>
   );

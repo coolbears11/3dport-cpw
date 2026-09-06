@@ -1,6 +1,20 @@
 import styles from "./ProjectOverlay.module.css";
 
 export default function ProjectOverlay({ project, onOpenDetail }) {
+  // System beats — the utility/feasibility moments out on the site, before
+  // the projects begin. Same overlay slot, but no image, no metadata and
+  // no "View project" button: there is no project behind them to open.
+  // Big type, one short paragraph, and then back to the scene.
+  if (project.kind === "note") {
+    return (
+      <div className={`${styles.card} ${styles.noteCard}`}>
+        <p className={`eyebrow-label ${styles.eyebrow}`}>{project.category}</p>
+        <h3 className={styles.noteTitle}>{project.title}</h3>
+        <p className={styles.description}>{project.description}</p>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.card}>
       <p className={`eyebrow-label ${styles.eyebrow}`}>
