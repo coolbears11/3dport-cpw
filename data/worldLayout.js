@@ -139,8 +139,10 @@ export const ZONE_A_TURBINES = [
 // The solar cascade, stepping away on a diagonal across open ground.
 export const ZONE_A_SOLAR_FIELD = {
   origin: [-41, -15],
-  step: [-3.4, -2.6],
-  count: 6,
+  step: [-4.1, -3.1],
+  // Four clusters, stepped further apart. Six at a tighter step was 270
+  // panel meshes on its own — and a sparse field reads better anyway.
+  count: 4,
   rows: 3,
   cols: 3,
   rotationY: Math.PI / 7,
