@@ -7,10 +7,7 @@
   justify-content: center;
   overflow-y: auto;
   padding: clamp(1.5rem, 5vw, 4.5rem) clamp(1rem, 4vw, 3rem);
-  /* The scene behind the modal is a dark site now, so the scrim dims
-     downward instead of washing to paper. The cards stay white and gain
-     contrast from it. */
-  background: rgba(11, 12, 13, 0.55);
+  background: rgba(245, 244, 241, 0.42);
   backdrop-filter: blur(22px) saturate(1.05);
   -webkit-backdrop-filter: blur(22px) saturate(1.05);
   animation: fadeIn var(--duration-base) var(--ease-premium);

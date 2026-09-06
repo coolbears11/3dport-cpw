@@ -11,16 +11,19 @@ import Landscaping from "./Landscaping";
 import GroundDots from "./GroundDots";
 import {
   STONE,
+  STONE_DARK,
   STONE_DEEP,
   INK_DETAIL,
   ACCENT,
   ACCENT_WIND,
   ACCENT_SOLAR,
+  ACCENT_WATER,
   TRACE,
   SKY,
   GROUND,
   GRID,
-  SOLAR_PANEL,
+  PLANT,
+  PLANT_DEEP,
 } from "./sceneKit";
 import {
   ZONE_A_BUILDINGS,
@@ -28,6 +31,12 @@ import {
   ZONE_A_SOLAR_FIELD,
   ZONE_A_UTILITY_BLOCKS,
   ZONE_A_MERGE_POINT,
+  ZONE_U_COOLING_TOWERS,
+  ZONE_U_SUBSTATION,
+  ZONE_U_TANKS,
+  ZONE_U_FEEDS,
+  ZONE_U_SWITCHYARD_NODE,
+  TRUNK_WAYPOINTS,
   ZONE_A_TREES,
   ZONE_A_SHRUBS,
   ZONE_A_PATHS,
@@ -37,6 +46,9 @@ import {
 } from "@/data/worldLayout";
 
 const BLADE_LENGTH = 1.7;
+
+// Which colour a feed pulses, by what generates it.
+const FEED_COLORS = { wind: ACCENT_WIND, solar: ACCENT_SOLAR, water: ACCENT_WATER };
 
 // Tapered blade profile — narrow root, a wide shoulder, tapering to a point
 // at the tip — extruded thin. Built once and shared across every turbine
@@ -115,17 +127,17 @@ function SolarPanel({ position }) {
     <group position={[position[0], 0.4, position[1]]} rotation={[-Math.PI / 5, 0, 0]}>
       <mesh castShadow receiveShadow>
         <boxGeometry args={[0.9, 0.04, 0.55]} />
-        <meshStandardMaterial color={SOLAR_PANEL} roughness={0.28} metalness={0.35} />
+        <meshStandardMaterial color={STONE_DARK} roughness={0.28} metalness={0.28} />
       </mesh>
       {[-0.28, 0, 0.28].map((x) => (
         <mesh key={x} position={[x, 0.024, 0]}>
           <boxGeometry args={[0.012, 0.01, 0.53]} />
-          <meshStandardMaterial color={ACCENT_SOLAR} transparent opacity={0.3} />
+          <meshStandardMaterial color={ACCENT_SOLAR} transparent opacity={0.5} />
         </mesh>
       ))}
       <mesh position={[0, 0.024, 0]}>
         <boxGeometry args={[0.88, 0.01, 0.012]} />
-        <meshStandardMaterial color={ACCENT_SOLAR} transparent opacity={0.3} />
+        <meshStandardMaterial color={ACCENT_SOLAR} transparent opacity={0.5} />
       </mesh>
     </group>
   );
@@ -169,6 +181,141 @@ function SolarArray({ origin = [0, 0], step = [3, -2], count = 4, rows = 3, cols
   );
 }
 
+// A hyperbolic cooling tower: a flared lower shell and a slightly belled
+// upper shell meeting at a waist, with a rim lip. Two stacked cylinders
+// approximate the hyperboloid closely enough at this scale, and it gives
+// the power field the tallest, most immediately readable silhouette on
+// the site.
+function CoolingTower({ position = [0, 0], scale = 1 }) {
+  const lowerH = 3.2;
+  const upperH = 1.5;
+  const rBase = 1.85;
+  const rWaist = 1.02;
+  const rLip = 1.3;
+  return (
+    <group position={[position[0], 0, position[1]]} scale={scale}>
+      <mesh position={[0, lowerH / 2, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[rWaist, rBase, lowerH, 28, 1, true]} />
+        <meshStandardMaterial color={PLANT} roughness={0.85} side={THREE.DoubleSide} />
+      </mesh>
+      <mesh position={[0, lowerH + upperH / 2, 0]} castShadow>
+        <cylinderGeometry args={[rLip, rWaist, upperH, 28, 1, true]} />
+        <meshStandardMaterial color={PLANT} roughness={0.85} side={THREE.DoubleSide} />
+      </mesh>
+      {/* rim lip, and a recessed disc so the throat doesn't read hollow */}
+      <mesh position={[0, lowerH + upperH, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[rLip, 0.05, 8, 28]} />
+        <meshStandardMaterial color={PLANT_DEEP} roughness={0.7} />
+      </mesh>
+      <mesh position={[0, lowerH + upperH - 0.25, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[rLip * 0.97, 28]} />
+        <meshStandardMaterial color={PLANT_DEEP} roughness={0.95} />
+      </mesh>
+      {/* base skirt columns */}
+      {Array.from({ length: 12 }).map((_, i) => {
+        const a = (i / 12) * Math.PI * 2;
+        return (
+          <mesh key={i} position={[Math.sin(a) * rBase * 0.96, 0.22, Math.cos(a) * rBase * 0.96]}>
+            <boxGeometry args={[0.12, 0.44, 0.12]} />
+            <meshStandardMaterial color={PLANT_DEEP} roughness={0.7} />
+          </mesh>
+        );
+      })}
+    </group>
+  );
+}
+
+// The switchyard: a fenced pad carrying transformer housings, lattice
+// gantries and insulator stacks. This is where every feed in the power
+// field is collected before the trunk line leaves for the compound.
+function Substation({ position = [0, 0], rotationY = 0 }) {
+  const padW = 5.4;
+  const padD = 3.6;
+  return (
+    <group position={[position[0], 0, position[1]]} rotation={[0, rotationY, 0]}>
+      <mesh position={[0, 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+        <planeGeometry args={[padW, padD]} />
+        <meshStandardMaterial color={PLANT_DEEP} roughness={0.95} />
+      </mesh>
+      {/* transformer housings */}
+      {[-1.5, 0.1, 1.7].map((x, i) => (
+        <group key={x} position={[x, 0, -0.6]}>
+          <EdgeBox args={[1.05, 0.95, 1.1]} position={[0, 0.48, 0]} color={PLANT} edgeOpacity={0.32} />
+          {/* radiator fins */}
+          {[-0.42, -0.14, 0.14, 0.42].map((z) => (
+            <mesh key={z} position={[0.58, 0.48, z]}>
+              <boxGeometry args={[0.1, 0.7, 0.06]} />
+              <meshStandardMaterial color={PLANT_DEEP} roughness={0.6} />
+            </mesh>
+          ))}
+          {/* bushings */}
+          {[-0.28, 0.28].map((z) => (
+            <mesh key={z} position={[0, 1.16, z]}>
+              <cylinderGeometry args={[0.07, 0.1, 0.44, 10]} />
+              <meshStandardMaterial color={INK_DETAIL} roughness={0.5} />
+            </mesh>
+          ))}
+        </group>
+      ))}
+      {/* lattice gantry spanning the pad */}
+      {[-2.2, 2.2].map((x) => (
+        <mesh key={x} position={[x, 1.1, 1.1]}>
+          <boxGeometry args={[0.12, 2.2, 0.12]} />
+          <meshStandardMaterial color={INK_DETAIL} roughness={0.55} />
+        </mesh>
+      ))}
+      <mesh position={[0, 2.14, 1.1]}>
+        <boxGeometry args={[4.5, 0.1, 0.1]} />
+        <meshStandardMaterial color={INK_DETAIL} roughness={0.55} />
+      </mesh>
+      {/* insulator stacks hanging from the gantry */}
+      {[-1.5, 0, 1.5].map((x) => (
+        <mesh key={x} position={[x, 1.72, 1.1]}>
+          <cylinderGeometry args={[0.05, 0.05, 0.72, 8]} />
+          <meshStandardMaterial color={PLANT_DEEP} roughness={0.5} />
+        </mesh>
+      ))}
+      {/* perimeter fence posts */}
+      {Array.from({ length: 14 }).map((_, i) => {
+        const t = i / 14;
+        const per = 2 * (padW + padD);
+        const d = t * per;
+        let x, z;
+        if (d < padW) { x = -padW / 2 + d; z = -padD / 2; }
+        else if (d < padW + padD) { x = padW / 2; z = -padD / 2 + (d - padW); }
+        else if (d < 2 * padW + padD) { x = padW / 2 - (d - padW - padD); z = padD / 2; }
+        else { x = -padW / 2; z = padD / 2 - (d - 2 * padW - padD); }
+        return (
+          <mesh key={i} position={[x, 0.34, z]}>
+            <boxGeometry args={[0.05, 0.68, 0.05]} />
+            <meshStandardMaterial color={INK_DETAIL} transparent opacity={0.6} roughness={0.6} />
+          </mesh>
+        );
+      })}
+    </group>
+  );
+}
+
+// Squat storage tanks with a domed cap and a banding ring.
+function StorageTank({ position = [0, 0], radius = 1.2, height = 1.6 }) {
+  return (
+    <group position={[position[0], 0, position[1]]}>
+      <mesh position={[0, height / 2, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[radius, radius, height, 22]} />
+        <meshStandardMaterial color={PLANT} roughness={0.8} />
+      </mesh>
+      <mesh position={[0, height * 0.62, 0]}>
+        <cylinderGeometry args={[radius + 0.02, radius + 0.02, 0.06, 22]} />
+        <meshStandardMaterial color={PLANT_DEEP} roughness={0.6} />
+      </mesh>
+      <mesh position={[0, height, 0]} castShadow>
+        <sphereGeometry args={[radius, 22, 10, 0, Math.PI * 2, 0, Math.PI / 2]} />
+        <meshStandardMaterial color={PLANT} roughness={0.8} />
+      </mesh>
+    </group>
+  );
+}
+
 // A small equipment block — utility clutter that reads as "inhabited site"
 // without adding architectural detail.
 function UtilityBlock({ position, size = [1, 1, 1] }) {
@@ -189,11 +336,11 @@ function GroundTrace({ points }) {
 
 // A large, sparse blueprint-style grid lying flat on the ground, reinforcing
 // the "site plan / infrastructure map" reading from the aerial camera.
-function GroundGrid({ size = 180, divisions = 48, position = [0, 0.01, 0] }) {
+function GroundGrid({ size = 280, divisions = 70, position = [0, 0.01, 0] }) {
   const grid = useMemo(() => {
     const g = new THREE.GridHelper(size, divisions, GRID, GRID);
     g.material.transparent = true;
-    g.material.opacity = 0.55;
+    g.material.opacity = 0.2;
     g.position.set(...position);
     return g;
   }, [size, divisions, position]);
@@ -214,12 +361,12 @@ export default function PlaceholderEnvironment() {
   return (
     <group>
       <color attach="background" args={[SKY]} />
-      <fog attach="fog" args={[SKY, 55, 170]} />
+      {/* Fog pushed well out: the power field sits ~48 units from the
+          compound and both have to stay legible from a mid-trunk camera. */}
+      <fog attach="fog" args={[SKY, 90, 260]} />
 
-      {/* Lighting had to come up a touch: on a dark ground there is far
-          less bounce back into the undersides of the massing. */}
-      <ambientLight intensity={0.72} />
-      <hemisphereLight args={["#ffffff", GROUND, 0.55]} />
+      <ambientLight intensity={0.68} />
+      <hemisphereLight args={["#ffffff", GROUND, 0.5]} />
       <directionalLight
         position={[24, 34, 18]}
         intensity={1.1}
@@ -235,11 +382,14 @@ export default function PlaceholderEnvironment() {
       {/* ground — sized generously beyond the camera's route so no edge is
           ever visible from the aerial framing. */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
-        <planeGeometry args={[160, 160]} />
+        <planeGeometry args={[260, 200]} />
         <meshStandardMaterial color={GROUND} roughness={0.95} />
       </mesh>
       <GroundGrid />
       <GroundDots width={70} depth={70} center={[0, 0]} />
+      <GroundDots width={60} depth={54} center={[-50, -6]} />
+      {/* the empty ground the trunk crosses — sparse, but not blank */}
+      <GroundDots width={44} depth={26} center={[-22, -5]} />
 
       {/* future .glb integration point: replace everything below with
           <InfrastructureModel /> loading /public/models/infrastructure.glb
@@ -277,8 +427,16 @@ export default function PlaceholderEnvironment() {
           />
         )
       )}
+      {/* --- LAYER 1: the power field, far west of the compound --- */}
       {ZONE_A_TURBINES.map((t) => (
         <Turbine key={t.name} position={t.position} scale={t.scale} speed={t.speed} name={t.name} />
+      ))}
+      {ZONE_U_COOLING_TOWERS.map((c, i) => (
+        <CoolingTower key={i} position={c.position} scale={c.scale} />
+      ))}
+      <Substation position={ZONE_U_SUBSTATION.position} rotationY={ZONE_U_SUBSTATION.rotationY} />
+      {ZONE_U_TANKS.map((t, i) => (
+        <StorageTank key={i} position={t.position} radius={t.radius} height={t.height} />
       ))}
       <SolarArray
         origin={ZONE_A_SOLAR_FIELD.origin}
@@ -305,44 +463,44 @@ export default function PlaceholderEnvironment() {
         <GroundTrace key={i} points={pts.map((p) => new THREE.Vector3(...p))} />
       ))}
 
-      {/* Generation, by contrast, is ALIVE. Each turbine runs a live feed
-          into the merge point in cool blue, and the solar field runs one in
-          warm amber, so the site reads as power being made out at the
-          edges and travelling inward. These used to be nothing at all —
-          the turbines and panels sat there unconnected while a single
-          short stub near the hero did all the narrative work. */}
-      {ZONE_A_TURBINES.map((t) => (
+      {/* Layer 1 internal feeds: each generation source gathers to the
+          switchyard, colour-coded by what makes the power. Routed through
+          a dogleg so they read as easements following property lines
+          rather than as spokes on a wheel. */}
+      {ZONE_U_FEEDS.map((f, i) => (
         <EnergyPaths
-          key={`feed-${t.name}`}
-          waypoints={[[t.position[0], 0.05, t.position[1]], ZONE_A_MERGE_POINT]}
+          key={`ufeed-${i}`}
+          waypoints={[f.from, f.via, ZONE_U_SWITCHYARD_NODE]}
           lineColor={TRACE}
-          lineOpacity={0.42}
-          lineWidth={1.2}
-          pulseColor={ACCENT_WIND}
+          lineOpacity={0.4}
+          lineWidth={1.1}
+          pulseColor={FEED_COLORS[f.type] ?? ACCENT_WIND}
           pulses={2}
-          speed={0.045}
+          speed={0.05}
         />
       ))}
+
+      {/* THE TRUNK: Layer 1 to Layer 2. The single longest element in the
+          scene, and the thing that makes two distant zones read as one
+          system. Wider and brighter than the feeds that fill it. */}
       <EnergyPaths
-        waypoints={[[ZONE_A_SOLAR_FIELD.origin[0], 0.05, ZONE_A_SOLAR_FIELD.origin[1]], ZONE_A_MERGE_POINT]}
+        waypoints={TRUNK_WAYPOINTS}
         lineColor={TRACE}
-        lineOpacity={0.42}
-        lineWidth={1.2}
-        pulseColor={ACCENT_SOLAR}
-        pulses={2}
-        speed={0.05}
+        lineOpacity={0.62}
+        lineWidth={2.2}
+        pulseColor={ACCENT}
+        pulses={4}
+        speed={0.055}
       />
 
-      {/* The final run into the hero building: everything that arrived at
-          the merge point goes in here. Brighter and faster than the feeds,
-          because this is the payoff of the whole diagram. */}
+      {/* The last few metres, into the hero building itself. */}
       <EnergyPaths
         waypoints={MERGE_TO_HERO_WAYPOINTS}
         lineColor={TRACE}
         lineOpacity={0.7}
         lineWidth={2}
         pulseColor={ACCENT}
-        pulses={3}
+        pulses={2}
         speed={0.14}
       />
     </group>

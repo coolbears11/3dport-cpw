@@ -1,27 +1,26 @@
-/* These cards float directly over the 3D scene, which is now a dark site.
-   Type is light rather than ink, or it would be invisible against it. */
 .card {
   max-width: 26rem;
-  color: var(--color-on-dark);
+  color: var(--color-ink);
 }
 
 .eyebrow {
-  color: var(--color-on-dark-soft);
+  color: var(--color-ink-soft);
   margin-bottom: var(--space-3);
 }
 
-/* A system beat: no image, no meta, no CTA — just a statement. Bigger type
-   than a project card so these read as section breaks in the scroll rather
-   than as another project. */
+/* A system beat — the Layer 1 / Layer 2 statements out on the site. No
+   image, no metadata, no CTA: there is no project behind them to open.
+   Larger type than a project card so they read as chapter breaks in the
+   scroll rather than as another project. */
 .noteCard {
-  max-width: 30rem;
+  max-width: 32rem;
 }
 
 .noteTitle {
   font-size: var(--fs-h2);
   font-weight: 500;
   line-height: 1.04;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   margin-bottom: var(--space-4);
 }
 
@@ -29,7 +28,7 @@
   font-size: var(--fs-lede);
   line-height: 1.5;
   margin-bottom: 0;
-  max-width: 26rem;
+  max-width: 27rem;
 }
 
 .title {
@@ -42,7 +41,7 @@
 .description {
   font-size: var(--fs-body);
   line-height: 1.55;
-  color: var(--color-on-dark-soft);
+  color: var(--color-ink-soft);
   margin-bottom: var(--space-4);
 }
 
@@ -57,19 +56,19 @@
   font-size: 0.68rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--color-on-dark-faint);
+  color: var(--color-ink-faint);
   margin-bottom: 0.2rem;
 }
 
 .meta dd {
   font-size: 0.9rem;
-  color: var(--color-on-dark);
+  color: var(--color-ink);
 }
 
 .media {
   width: 11rem;
-  border: 1px solid var(--color-line-on-dark);
-  background: var(--color-bg-dark-soft);
+  border: 1px solid var(--color-line);
+  background: var(--color-paper);
   margin-bottom: var(--space-4);
   overflow: hidden;
 }
@@ -92,7 +91,7 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 0 0 2px;
-  border-bottom: 1px solid var(--color-on-dark);
+  border-bottom: 1px solid var(--color-ink);
 }
 
 .ctaArrow {
