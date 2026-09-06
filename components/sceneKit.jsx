@@ -22,6 +22,15 @@ export const INK = "#14161a";
 // Pure INK is reserved for thin, low-opacity outline strokes only.
 export const INK_DETAIL = "#a39c8c";
 export const ACCENT = "#3ef07f";
+// Service colours for the utility corridors. Purple reads as water on
+// every infrastructure diagram convention, and it is the one that has to
+// travel all the way from treatment into the hall.
+export const ACCENT_WATER = "#a78bfa";
+export const ACCENT_FIBER = "#5ab9ff";
+// Plant hardware — cooling shells, dam wall, clarifiers. A half-step
+// deeper than the buildings so generation reads as equipment.
+export const PLANT = "#e4e0d7";
+export const PLANT_DEEP = "#d2ccbf";
 export const TRACE = "#c2bcac";
 export const GLASS = "#e9eae4";
 export const FOLIAGE = "#ddd8cb";
