@@ -25,7 +25,7 @@ export const sections = [
   // them as a statement rather than a project card.
   {
     id: "sys-generation",
-    cameraStop: "sitePlan",
+    cameraStop: "windField",
     projects: [
       {
         id: "sys-generation-note",
@@ -34,21 +34,6 @@ export const sections = [
         title: "Power & Capacity",
         description:
           "150 MW of available capacity confirmed with Duke Energy on the target parcel \u2014 no required utility upgrades, and expansion potential beyond 300 MW.",
-        alignment: "left",
-      },
-    ],
-  },
-  {
-    id: "sys-water",
-    cameraStop: "waterTreatment",
-    projects: [
-      {
-        id: "sys-water-note",
-        kind: "note",
-        category: "Layer 1.0 / Water",
-        title: "Water & Cooling",
-        description:
-          "Local water access assessed against advanced liquid cooling and conventional HVAC loads. At high rack density, water availability decides the site as surely as power does.",
         alignment: "left",
       },
     ],
@@ -70,7 +55,7 @@ export const sections = [
   },
   {
     id: "sys-interconnection",
-    cameraStop: "trunkRunWest",
+    cameraStop: "powerConverge",
     projects: [
       {
         id: "sys-interconnection-note",
