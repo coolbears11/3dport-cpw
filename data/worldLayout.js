@@ -116,39 +116,31 @@ export const ZONE_A_BUILDINGS = [
 // layer is its own place and the distance to the load is part of the
 // picture; turbines ten units from the hero read as landscaping.
 export const ZONE_A_TURBINES = [
-  { position: [-92, -16], scale: 1, speed: 1.05, name: "turbine_01_blades" },
-  { position: [-84, -23], scale: 0.92, speed: 0.85, name: "turbine_02_blades" },
-  { position: [-97, -2], scale: 1.08, speed: 1.2, name: "turbine_03_blades" },
-  { position: [-88, 7], scale: 0.88, speed: 0.95, name: "turbine_04_blades" },
+  { position: [-30, -12], scale: 1, speed: 1.05, name: "turbine_01_blades" },
+  { position: [-24, -19], scale: 0.92, speed: 0.85, name: "turbine_02_blades" },
+  { position: [-37, -5], scale: 1.08, speed: 1.2, name: "turbine_03_blades" },
+  { position: [-29, 4], scale: 0.88, speed: 0.95, name: "turbine_04_blades" },
 ];
-
-// --- Nuclear: two hyperbolic cooling shells and a containment dome.
-export const ZONE_U_NUCLEAR = {
-  towers: [
-    { position: [-88, -6], scale: 1 },
-    { position: [-82.5, -8.2], scale: 0.88 },
-  ],
-  containment: { position: [-93, -2] },
-};
-
-// --- Hydro: a dam wall across a reservoir, with a spillway.
-export const ZONE_U_DAM = { position: [-79, 14], width: 13, rotationY: -Math.PI / 14 };
-
-// --- Water treatment: circular clarifiers with rotating bridge arms.
-export const ZONE_U_CLARIFIERS = [
-  { position: [-70, -19], radius: 2.1 },
-  { position: [-65.4, -21.4], radius: 1.6 },
-  { position: [-74.4, -21.6], radius: 1.4 },
-];
-
-// --- The switchyard: everything in this field collects here first.
-export const ZONE_U_SUBSTATION = { position: [-57, -7], rotationY: Math.PI / 18 };
 // A diagonal cascade of solar clusters well off to the east, clear of every
 // building footprint — a compound has room to spread these out rather than
 // hugging one spot next to the anchor building.
+// --- Nuclear: two hyperbolic cooling shells and a containment dome,
+// sited in the existing power field. Positions kept INSIDE the ground and
+// fog already in use, so nothing else about the world has to change.
+export const ZONE_U_NUCLEAR = {
+  towers: [
+    { position: [-41, -14], scale: 1 },
+    { position: [-36.5, -16], scale: 0.88 },
+  ],
+  containment: { position: [-45, -10] },
+};
+
+// --- Hydro: a dam wall holding a reservoir, north of the wind field.
+export const ZONE_U_DAM = { position: [-34, 11], width: 12, rotationY: -Math.PI / 14 };
+
 export const ZONE_A_SOLAR_FIELD = {
-  origin: [-64, -11],
-  step: [-4.1, -3.0],
+  origin: [-21, -13],
+  step: [-3.9, -2.9],
   count: 4,
   rows: 3,
   cols: 3,
@@ -212,59 +204,38 @@ export const ZONE_A_BRIDGE = { position: [-6, -6], length: 2.6, rotationY: Math.
 // no matter how long the run is.
 export const UTILITY_CORRIDORS = [
   {
-    // THE TRUNK. Switchyard to the compound — the longest run on the site
-    // and the thing that makes two distant zones read as one system.
+    // The main trunk: power field to the compound's merge point.
     id: "trunk",
-    strands: 9,
-    accent: "power",
+    strands: 8,
+    accent: true,
     points: [
-      [-54, 0.05, -7],
       [-34, 0.05, -7],
-      [-34, 0.05, -4],
-      [-12, 0.05, -4],
-      [-12, 0.05, -3],
+      [-19, 0.05, -7],
+      [-19, 0.05, -3],
       [0, 0.05, -3],
     ],
   },
   {
-    // WATER. Treatment plant to the hall, for liquid cooling. Runs its
-    // own route and its own colour the whole way.
-    id: "water",
-    strands: 5,
-    accent: "water",
+    // A secondary service run entering the compound from the north-west.
+    id: "service-nw",
+    strands: 6,
+    accent: false,
     points: [
-      [-69, 0.05, -20],
-      [-40, 0.05, -20],
-      [-40, 0.05, -9],
-      [-6, 0.05, -9],
-      [-6, 0.05, -2],
-      [-1.5, 0.05, -2],
+      [-33, 0.05, 9],
+      [-15, 0.05, 9],
+      [-15, 0.05, 5],
+      [-5, 0.05, 5],
     ],
   },
   {
-    // FIBRE. Comes in from the north-east, nothing to do with generation —
-    // low latency is its own siting problem.
-    id: "fiber",
-    strands: 4,
-    accent: "fiber",
+    // An east corridor crossing behind the supporting buildings.
+    id: "east-spur",
+    strands: 6,
+    accent: true,
     points: [
-      [26, 0.05, -18],
-      [26, 0.05, 8],
-      [10, 0.05, 8],
-      [10, 0.05, 3],
-      [3, 0.05, 3],
-    ],
-  },
-  {
-    // Hydro tie-in, joining the trunk rather than running its own way in.
-    id: "hydro-tie",
-    strands: 5,
-    accent: "power",
-    points: [
-      [-78, 0.05, 12],
-      [-62, 0.05, 12],
-      [-62, 0.05, -7],
-      [-54, 0.05, -7],
+      [20, 0.05, -16],
+      [20, 0.05, 7],
+      [9, 0.05, 7],
     ],
   },
 ];
