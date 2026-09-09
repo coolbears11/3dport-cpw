@@ -124,20 +124,6 @@ export const ZONE_A_TURBINES = [
 // A diagonal cascade of solar clusters well off to the east, clear of every
 // building footprint — a compound has room to spread these out rather than
 // hugging one spot next to the anchor building.
-// --- Nuclear: two hyperbolic cooling shells and a containment dome,
-// sited in the existing power field. Positions kept INSIDE the ground and
-// fog already in use, so nothing else about the world has to change.
-export const ZONE_U_NUCLEAR = {
-  towers: [
-    { position: [-41, -14], scale: 1 },
-    { position: [-36.5, -16], scale: 0.88 },
-  ],
-  containment: { position: [-45, -10] },
-};
-
-// --- Hydro: a dam wall holding a reservoir, north of the wind field.
-export const ZONE_U_DAM = { position: [-34, 11], width: 12, rotationY: -Math.PI / 14 };
-
 export const ZONE_A_SOLAR_FIELD = {
   origin: [-21, -13],
   step: [-3.9, -2.9],
