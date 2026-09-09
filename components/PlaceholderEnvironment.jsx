@@ -9,17 +9,7 @@ import DetailedBuilding from "./DetailedBuilding";
 import HeroDataCenter from "./HeroDataCenter";
 import Landscaping from "./Landscaping";
 import GroundDots from "./GroundDots";
-import {
-  STONE,
-  STONE_DARK,
-  STONE_DEEP,
-  INK_DETAIL,
-  ACCENT,
-  TRACE,
-  PLANT,
-  PLANT_DEEP,
-  WATER,
-} from "./sceneKit";
+import { STONE, STONE_DARK, STONE_DEEP, INK_DETAIL, ACCENT, TRACE } from "./sceneKit";
 import {
   ZONE_A_BUILDINGS,
   ZONE_A_TURBINES,
@@ -27,8 +17,6 @@ import {
   ZONE_A_UTILITY_BLOCKS,
   ZONE_A_MERGE_POINT,
   UTILITY_CORRIDORS,
-  ZONE_U_NUCLEAR,
-  ZONE_U_DAM,
   ZONE_A_TREES,
   ZONE_A_SHRUBS,
   ZONE_A_PATHS,
@@ -166,96 +154,6 @@ function SolarArray({ origin = [0, 0], step = [3, -2], count = 4, rows = 3, cols
           rotationY={rotationY}
         />
       ))}
-    </group>
-  );
-}
-
-// A hyperbolic cooling shell: a flared lower section and a belled upper
-// one meeting at a waist. Two open-ended cylinders approximate the
-// hyperboloid well enough at this scale and cost almost nothing.
-function CoolingTower({ position = [0, 0], scale = 1 }) {
-  const lowerH = 3.4;
-  const upperH = 1.5;
-  const rBase = 1.9;
-  const rWaist = 1.05;
-  const rLip = 1.32;
-  return (
-    <group position={[position[0], 0, position[1]]} scale={scale}>
-      <mesh position={[0, lowerH / 2, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[rWaist, rBase, lowerH, 26, 1, true]} />
-        <meshStandardMaterial color={PLANT} roughness={0.85} side={THREE.DoubleSide} />
-      </mesh>
-      <mesh position={[0, lowerH + upperH / 2, 0]} castShadow>
-        <cylinderGeometry args={[rLip, rWaist, upperH, 26, 1, true]} />
-        <meshStandardMaterial color={PLANT} roughness={0.85} side={THREE.DoubleSide} />
-      </mesh>
-      <mesh position={[0, lowerH + upperH - 0.22, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <circleGeometry args={[rLip * 0.96, 26]} />
-        <meshStandardMaterial color={PLANT_DEEP} roughness={0.95} />
-      </mesh>
-      {Array.from({ length: 8 }).map((_, i) => {
-        const a = (i / 8) * Math.PI * 2;
-        return (
-          <mesh key={i} position={[Math.sin(a) * rBase * 0.95, 0.22, Math.cos(a) * rBase * 0.95]}>
-            <boxGeometry args={[0.13, 0.44, 0.13]} />
-            <meshStandardMaterial color={PLANT_DEEP} roughness={0.7} />
-          </mesh>
-        );
-      })}
-    </group>
-  );
-}
-
-// Reactor containment: a squat cylinder under a hemisphere.
-function ContainmentDome({ position = [0, 0] }) {
-  const r = 1.5;
-  const h = 1.9;
-  return (
-    <group position={[position[0], 0, position[1]]}>
-      <mesh position={[0, h / 2, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[r, r, h, 22]} />
-        <meshStandardMaterial color={PLANT} roughness={0.8} />
-      </mesh>
-      <mesh position={[0, h, 0]} castShadow>
-        <sphereGeometry args={[r, 22, 10, 0, Math.PI * 2, 0, Math.PI / 2]} />
-        <meshStandardMaterial color={PLANT} roughness={0.8} />
-      </mesh>
-      <EdgeBox args={[1.5, 0.7, 1.1]} position={[r + 0.8, 0.35, 0]} color={PLANT_DEEP} edgeOpacity={0.3} />
-    </group>
-  );
-}
-
-// Hydro: a dam wall with buttresses, a spillway notch, and the reservoir
-// water held behind it.
-function HydroDam({ position = [0, 0], width = 12, rotationY = 0 }) {
-  const h = 2.4;
-  const t = 0.85;
-  return (
-    <group position={[position[0], 0, position[1]]} rotation={[0, rotationY, 0]}>
-      {/* reservoir */}
-      <mesh position={[0, 0.06, 5.5]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[width * 1.5, 11]} />
-        <meshStandardMaterial color={WATER} roughness={0.35} metalness={0.15} />
-      </mesh>
-      {/* wall */}
-      <EdgeBox args={[width, h, t]} position={[0, h / 2, 0]} color={PLANT} edgeOpacity={0.3} />
-      {/* downstream buttresses */}
-      {[-0.34, -0.11, 0.11, 0.34].map((f) => (
-        <mesh key={f} position={[width * f, h * 0.34, -t / 2 - 0.42]} castShadow>
-          <boxGeometry args={[0.5, h * 0.68, 0.85]} />
-          <meshStandardMaterial color={PLANT_DEEP} roughness={0.8} />
-        </mesh>
-      ))}
-      {/* spillway chute */}
-      <mesh position={[width * 0.06, h * 0.3, -t / 2 - 1.5]} rotation={[-Math.PI / 7, 0, 0]} castShadow>
-        <boxGeometry args={[2.1, 0.12, 3.1]} />
-        <meshStandardMaterial color={WATER} roughness={0.4} metalness={0.12} />
-      </mesh>
-      {/* crest roadway */}
-      <mesh position={[0, h + 0.07, 0]}>
-        <boxGeometry args={[width + 0.3, 0.14, t + 0.35]} />
-        <meshStandardMaterial color={PLANT_DEEP} roughness={0.75} />
-      </mesh>
     </group>
   );
 }
@@ -423,11 +321,6 @@ export default function PlaceholderEnvironment() {
       {ZONE_A_TURBINES.map((t) => (
         <Turbine key={t.name} position={t.position} scale={t.scale} speed={t.speed} name={t.name} />
       ))}
-      {ZONE_U_NUCLEAR.towers.map((c, i) => (
-        <CoolingTower key={i} position={c.position} scale={c.scale} />
-      ))}
-      <ContainmentDome position={ZONE_U_NUCLEAR.containment.position} />
-      <HydroDam position={ZONE_U_DAM.position} width={ZONE_U_DAM.width} rotationY={ZONE_U_DAM.rotationY} />
       <SolarArray
         origin={ZONE_A_SOLAR_FIELD.origin}
         step={ZONE_A_SOLAR_FIELD.step}

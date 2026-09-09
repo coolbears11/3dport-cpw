@@ -22,10 +22,6 @@ export const INK = "#14161a";
 // Pure INK is reserved for thin, low-opacity outline strokes only.
 export const INK_DETAIL = "#a39c8c";
 export const ACCENT = "#3ef07f";
-// Plant hardware — cooling shells, containment, dam wall. A half-step
-// deeper than the buildings so generation reads as equipment.
-export const PLANT = "#e4e0d7";
-export const PLANT_DEEP = "#d2ccbf";
 export const TRACE = "#c2bcac";
 export const GLASS = "#e9eae4";
 export const FOLIAGE = "#ddd8cb";
