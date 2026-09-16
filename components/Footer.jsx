@@ -19,14 +19,24 @@ export default function Footer() {
           </a>
         </div>
         <div className={styles.column}>
-          <p className={styles.label}>Website</p>
-          <a href="https://jlougigascale.github.io" target="_blank" rel="noopener noreferrer" className={styles.value}>
-            jlougigascale.github.io
+          <p className={styles.label}>LinkedIn</p>
+          <a
+            href="https://www.linkedin.com/in/jason-lou-332031254/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.value}
+          >
+            linkedin.com/in/jason-lou
           </a>
         </div>
         <div className={styles.column}>
           <p className={styles.label}>Resume</p>
-          <a href="/JasonLou-Resume.pdf" target="_blank" rel="noopener noreferrer" className={styles.value}>
+          <a
+            href="/JasonLou-Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.value}
+          >
             Download PDF
           </a>
         </div>
@@ -38,11 +48,11 @@ export default function Footer() {
 
       <div className={styles.bottom}>
         <p className={styles.copyright}>
-          &copy; {new Date().getFullYear()} Field Notes. All rights reserved.
+          &copy; {new Date().getFullYear()} Jason Lou. All rights reserved.
         </p>
         <p className={styles.mark}>
           <span className={styles.dot} aria-hidden="true" />
-          Prototype build
+          Los Angeles, CA
         </p>
       </div>
     </footer>
