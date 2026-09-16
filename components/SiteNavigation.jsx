@@ -5,7 +5,7 @@ import styles from "./SiteNavigation.module.css";
 const LINKS = [
   { label: "Platform", href: "#divider" },
   { label: "Projects", href: "#chapters" },
-  { label: "Systems", href: "#chapters" },
+  { label: "Systems", href: "#systems" },
   { label: "Resume", href: "#footer" },
 ];
 
