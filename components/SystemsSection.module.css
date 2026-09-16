@@ -25,8 +25,18 @@
 
 /* Prose stays narrow even though the section is wide. Long measure is
    what makes a wall of text feel like a wall of text. */
+/* Direction copy and the journey column side by side. The prose used to
+   sit alone at 36rem inside a 68rem section, which left a lot of dead
+   space to its right. */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: var(--space-6);
+  align-items: start;
+}
+
 .prose {
-  max-width: 36rem;
+  max-width: 38rem;
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
@@ -40,6 +50,131 @@
 
 .prose p:first-child {
   color: var(--color-ink);
+}
+
+/* --- scroll reveal -------------------------------------------------- */
+/* Each block starts slightly low and transparent, then settles as the
+   section enters view. The delays stagger them so it reads as a sequence
+   rather than everything arriving at once. */
+.prose p,
+.journey {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.75s var(--ease-premium), transform 0.75s var(--ease-premium);
+}
+
+.split[data-revealed="true"] .prose p,
+.split[data-revealed="true"] .journey {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.split[data-revealed="true"] .prose p:nth-child(1) { transition-delay: 0.05s; }
+.split[data-revealed="true"] .prose p:nth-child(2) { transition-delay: 0.16s; }
+.split[data-revealed="true"] .prose p:nth-child(3) { transition-delay: 0.27s; }
+.split[data-revealed="true"] .prose p:nth-child(4) { transition-delay: 0.38s; }
+.split[data-revealed="true"] .journey { transition-delay: 0.3s; }
+
+/* Anyone who has asked for less motion gets none of it. */
+@media (prefers-reduced-motion: reduce) {
+  .prose p,
+  .journey {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* --- the journey ---------------------------------------------------- */
+
+.journey {
+  padding-left: var(--space-5);
+  border-left: 1px solid var(--color-line);
+}
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.step {
+  position: relative;
+  padding-left: var(--space-4);
+}
+
+/* the connecting rule between markers */
+.step::after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 1.1em;
+  bottom: calc(var(--space-4) * -1);
+  width: 1px;
+  background: var(--color-line);
+}
+
+.step:last-child::after {
+  display: none;
+}
+
+.step::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.45em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid var(--color-ink-faint);
+  background: var(--color-surface);
+}
+
+.step[data-here]::before {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 4px var(--color-accent-soft);
+}
+
+.stepJob {
+  display: block;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  color: var(--color-ink);
+}
+
+.step[data-here] .stepJob {
+  font-weight: 500;
+}
+
+.stepWhen {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
+  margin-top: 0.2rem;
+}
+
+.stepHere {
+  display: inline-block;
+  margin-top: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.journeyNote {
+  margin-top: var(--space-4);
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: var(--color-ink-soft);
 }
 
 /* --- tools, certifications, affiliations --------------------------- */
@@ -226,29 +361,61 @@
   padding: 0.24rem 0.5rem;
 }
 
-/* --- closing note -------------------------------------------------- */
+/* --- portrait + hobbies -------------------------------------------- */
 
-.dreamJobs {
+.personal {
   margin-top: var(--space-7);
-  padding-top: var(--space-4);
-  border-top: 1px solid var(--color-line);
-  max-width: 44rem;
-  font-size: 0.9rem;
-  line-height: 1.6;
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-ink);
+  display: grid;
+  grid-template-columns: 13rem minmax(0, 1fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.portrait {
+  margin: 0;
+  border: 1px solid var(--color-line);
+  background: var(--color-paper);
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+}
+
+.portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(1);
+}
+
+.personalText {
+  padding-top: 0.15rem;
+}
+
+.personalNote {
+  margin-top: var(--space-3);
+  font-size: 0.84rem;
+  line-height: 1.5;
   color: var(--color-ink-soft);
 }
 
-.dreamLabel {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: var(--fs-label);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-ink-faint);
-  margin-bottom: var(--space-2);
-}
-
 @media (max-width: 860px) {
+  .personal {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .portrait {
+    max-width: 12rem;
+  }
+  .split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .journey {
+    padding-left: 0;
+    border-left: none;
+    border-top: 1px solid var(--color-line);
+    padding-top: var(--space-4);
+  }
   .columns,
   .videoBlock {
     grid-template-columns: minmax(0, 1fr);
@@ -258,4 +425,3 @@
     max-width: none;
   }
 }
-
