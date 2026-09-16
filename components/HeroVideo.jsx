@@ -68,9 +68,8 @@ export default function HeroVideo() {
             Engineering.
           </h1>
           <p className={styles.lede}>
-            Power, site intelligence, preconstruction, estimating, and
-            digital execution for energy-intensive and mission-critical
-            projects.
+            Learning how complex projects move from an idea to
+            infrastructure.
           </p>
 
           <div className={styles.divider} role="presentation" />

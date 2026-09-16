@@ -36,11 +36,8 @@ const DREAM_JOBS = [
   { job: "Astronaut", when: "Age six" },
   { job: "Pro League player", when: "Middle school" },
   { job: "Pro basketball player", when: "High school" },
-  {
-    job: "Electrical trade, then construction engineering",
-    when: "Rio Hondo and Cal Poly Pomona, at the same time",
-    here: true,
-  },
+  { job: "Software developer", when: "High school" },
+  { job: "Construction engineer", when: "Cal Poly Pomona", here: true },
 ];
 
 // Reveals children one after another as the section scrolls into view.
@@ -94,8 +91,6 @@ const AFFILIATIONS = [
 
 export default function SystemsSection() {
   const [playing, setPlaying] = useState(false);
-  // A missing poster should read as an empty frame, not a broken icon.
-  const [posterOk, setPosterOk] = useState(true);
   const [revealRef, revealed] = useReveal();
 
   return (
@@ -106,10 +101,11 @@ export default function SystemsSection() {
 
         <div className={styles.split} ref={revealRef} data-revealed={revealed}>
           <div className={styles.prose}>
+            <span className={styles.rail} aria-hidden="true" />
             <p>
               What I want to build is the infrastructure behind the AI race:
-            data centers for hyperscalers and neoclouds. Most of what I read
-            outside work is the vertical stack. Where the power comes from,
+            data centers for <em className={styles.glow}>hyperscalers and neoclouds</em>. Most of what I read
+            outside work is <em className={styles.glow}>the vertical stack</em>. Where the power comes from,
             what interconnection actually costs in time, how land and water
             constrain a site long before anyone draws a building, and how
             those pieces price against each other.
@@ -117,7 +113,7 @@ export default function SystemsSection() {
             <p>
               The energy side is where I keep going deeper. Generation,
             available capacity, utility timelines. You can&rsquo;t evaluate a
-            site for compute without understanding the grid it plugs into,
+            site for compute without understanding <em className={styles.glow}>the grid it plugs into</em>,
             and that&rsquo;s a field I&rsquo;d rather know properly than
             approximately.
           </p>
@@ -153,7 +149,7 @@ export default function SystemsSection() {
               ))}
             </ol>
             <p className={styles.journeyNote}>
-              Three of them went nowhere. The one that stuck came with
+              Four of them went nowhere. The one that stuck came with
               drawings to read.
             </p>
           </aside>
@@ -226,7 +222,6 @@ export default function SystemsSection() {
               <video
                 className={styles.video}
                 src="/videos/microstation-freeway.mp4"
-                poster="/images/projects/microstation-freeway-poster.jpg"
                 controls
                 autoPlay
                 playsInline
@@ -238,14 +233,9 @@ export default function SystemsSection() {
                 onClick={() => setPlaying(true)}
                 aria-label="Play the freeway flythrough"
               >
-                {posterOk && (
-                  <img
-                    src="/images/projects/microstation-freeway-poster.jpg"
-                    alt=""
-                    loading="lazy"
-                    onError={() => setPosterOk(false)}
-                  />
-                )}
+                <span className={styles.posterLabel}>
+                  MicroStation / LumenRT
+                </span>
                 <span className={styles.playIcon} aria-hidden="true" />
                 <span className={styles.videoLength}>36 sec</span>
               </button>

@@ -35,7 +35,11 @@
   align-items: start;
 }
 
+/* An accent rail down the left of the Direction copy. Grows from nothing
+   as the section arrives, so the eye starts at the top of the text. */
 .prose {
+  position: relative;
+  padding-left: var(--space-4);
   max-width: 38rem;
   display: flex;
   flex-direction: column;
@@ -82,6 +86,74 @@
     opacity: 1;
     transform: none;
     transition: none;
+  }
+  .rail {
+    transform: scaleY(1);
+    transition: none;
+  }
+  /* no sweep, and the text returns to solid ink */
+  .glow {
+    animation: none;
+    background: none;
+    -webkit-text-fill-color: var(--color-ink);
+    color: var(--color-ink);
+  }
+}
+
+.rail {
+  position: absolute;
+  left: 0;
+  top: 0.35em;
+  bottom: 0.35em;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    var(--color-accent) 0%,
+    var(--color-accent) 55%,
+    var(--color-line) 100%
+  );
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 1.1s var(--ease-premium) 0.1s;
+}
+
+.split[data-revealed="true"] .rail {
+  transform: scaleY(1);
+}
+
+/* Key phrases get a slow accent sweep travelling back and forth through
+   the letterforms. Restrained on purpose: three phrases in the whole
+   section, and the text stays fully legible at every point in the cycle
+   because the gradient is mostly ink with a narrow accent band. */
+.glow {
+  font-style: normal;
+  color: var(--color-ink);
+  background-image: linear-gradient(
+    100deg,
+    currentColor 0%,
+    currentColor 40%,
+    var(--color-accent) 50%,
+    currentColor 60%,
+    currentColor 100%
+  );
+  background-size: 260% 100%;
+  background-position: 120% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: sweep 7s var(--ease-premium) infinite;
+}
+
+.prose p:nth-child(3) .glow { animation-delay: 1.1s; }
+.prose p:nth-child(4) .glow { animation-delay: 2.2s; }
+
+@keyframes sweep {
+  0%,
+  100% {
+    background-position: 120% 0;
+  }
+  50% {
+    background-position: -20% 0;
   }
 }
 
@@ -345,6 +417,17 @@
 
 .videoPoster:hover .playIcon {
   transform: translate(-50%, -50%) scale(1.07);
+}
+
+.posterLabel {
+  position: absolute;
+  left: var(--space-3);
+  bottom: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
 }
 
 .videoLength {
