@@ -36,8 +36,11 @@ const DREAM_JOBS = [
   { job: "Astronaut", when: "Age six" },
   { job: "Pro League player", when: "Middle school" },
   { job: "Pro basketball player", when: "High school" },
-  { job: "Electrician", when: "Rio Hondo" },
-  { job: "Construction engineer", when: "Cal Poly Pomona", here: true },
+  {
+    job: "Electrical trade, then construction engineering",
+    when: "Rio Hondo and Cal Poly Pomona, at the same time",
+    here: true,
+  },
 ];
 
 // Reveals children one after another as the section scrolls into view.
@@ -72,10 +75,13 @@ const HOBBIES = [
   "Tennis",
   "Basketball",
   "Backpacking",
+  "Cooking",
+  "Watch collecting",
   "League of Legends",
   "Traveling",
   "Eating, a lot",
   "Training AI models",
+  "Open to learning more",
 ];
 
 const AFFILIATIONS = [
@@ -147,7 +153,7 @@ export default function SystemsSection() {
               ))}
             </ol>
             <p className={styles.journeyNote}>
-              Four of them went nowhere. The one that stuck came with
+              Three of them went nowhere. The one that stuck came with
               drawings to read.
             </p>
           </aside>
@@ -258,9 +264,6 @@ export default function SystemsSection() {
                 <li key={item}>{item}</li>
               ))}
             </ul>
-            <p className={styles.personalNote}>
-              The last two are related more often than you&rsquo;d think.
-            </p>
           </div>
         </div>
       </div>
