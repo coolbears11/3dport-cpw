@@ -78,7 +78,6 @@ const HOBBIES = [
   "Traveling",
   "Eating, a lot",
   "Training AI models",
-  "Open to learning more",
 ];
 
 const AFFILIATIONS = [
@@ -124,11 +123,6 @@ export default function SystemsSection() {
             construction delay and forensic analysis, because understanding
             how projects fail is how you learn what to price for.
           </p>
-            <p>
-              I started in the trades. A year of electrical foundations
-              before construction engineering, and it&rsquo;s why I read a
-              set of drawings the way I do.
-            </p>
           </div>
 
           <aside className={styles.journey}>
