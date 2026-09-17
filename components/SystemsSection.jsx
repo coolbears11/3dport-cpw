@@ -142,10 +142,6 @@ export default function SystemsSection() {
                 </li>
               ))}
             </ol>
-            <p className={styles.journeyNote}>
-              Four of them went nowhere. The one that stuck came with
-              drawings to read.
-            </p>
           </aside>
         </div>
 

@@ -16,6 +16,8 @@
 }
 
 .heading {
+  position: relative;
+  display: inline-block;
   font-size: var(--fs-h2);
   font-weight: 500;
   line-height: 1.06;
@@ -37,6 +39,17 @@
 
 /* An accent rail down the left of the Direction copy. Grows from nothing
    as the section arrives, so the eye starts at the top of the text. */
+.heading::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.35rem;
+  width: 2.4rem;
+  height: 2px;
+  background: var(--color-accent);
+  box-shadow: 0 0 12px var(--color-accent);
+}
+
 .prose {
   position: relative;
   padding-left: var(--space-4);
@@ -242,12 +255,6 @@
   color: var(--color-accent);
 }
 
-.journeyNote {
-  margin-top: var(--space-4);
-  font-size: 0.84rem;
-  line-height: 1.5;
-  color: var(--color-ink-soft);
-}
 
 /* --- tools, certifications, affiliations --------------------------- */
 
@@ -256,7 +263,8 @@
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
   gap: var(--space-6);
-  border-top: 1px solid var(--color-ink);
+  border-top: 1px solid transparent;
+  border-image: linear-gradient(90deg, var(--color-accent) 0%, var(--color-ink) 22%, var(--color-line) 100%) 1;
   padding-top: var(--space-5);
 }
 
@@ -265,13 +273,27 @@
   min-width: 0;
 }
 
+/* A small charged square ahead of every section label. */
 .columnTitle {
+  position: relative;
+  padding-left: 0.95rem;
   font-family: var(--font-mono);
   font-size: var(--fs-label);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-ink-faint);
   margin-bottom: var(--space-3);
+}
+
+.columnTitle::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.32em;
+  width: 6px;
+  height: 6px;
+  background: var(--color-accent);
+  box-shadow: 0 0 9px var(--color-accent);
 }
 
 .columnTitleSpaced {
@@ -288,13 +310,38 @@
 }
 
 .tags li {
+  position: relative;
   font-size: 0.84rem;
   line-height: 1;
-  padding: 0.42rem 0.7rem;
+  padding: 0.42rem 0.7rem 0.42rem 0.95rem;
   border: 1px solid var(--color-line);
   border-radius: 2px;
   background: var(--color-paper);
   color: var(--color-ink);
+  transition: border-color var(--duration-base) var(--ease-premium),
+    box-shadow var(--duration-base) var(--ease-premium);
+}
+
+/* a lit filament down the leading edge of each chip */
+.tags li::before {
+  content: "";
+  position: absolute;
+  left: 0.42rem;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  width: 2px;
+  background: var(--color-accent);
+  opacity: 0.55;
+  transition: opacity var(--duration-base) var(--ease-premium);
+}
+
+.tags li:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
+}
+
+.tags li:hover::before {
+  opacity: 1;
 }
 
 .affiliations {
@@ -316,7 +363,8 @@
   font-size: 0.72rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--color-ink);
+  color: var(--color-accent);
+  text-shadow: 0 0 12px var(--color-accent-soft);
 }
 
 .affiliation dd {
@@ -334,7 +382,8 @@
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
   gap: var(--space-5);
   align-items: center;
-  border-top: 1px solid var(--color-ink);
+  border-top: 1px solid transparent;
+  border-image: linear-gradient(90deg, var(--color-accent) 0%, var(--color-ink) 22%, var(--color-line) 100%) 1;
   padding-top: var(--space-5);
 }
 
@@ -372,6 +421,31 @@
   aspect-ratio: 16 / 9;
 }
 
+/* corner brackets, drawn with two pseudo-elements rather than four */
+.videoFrame::before,
+.videoFrame::after {
+  content: "";
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.videoFrame::before {
+  top: 8px;
+  left: 8px;
+  border-top: 2px solid var(--color-accent);
+  border-left: 2px solid var(--color-accent);
+}
+
+.videoFrame::after {
+  right: 8px;
+  bottom: 8px;
+  border-bottom: 2px solid var(--color-accent);
+  border-right: 2px solid var(--color-accent);
+}
+
 .video,
 .videoPoster img {
   width: 100%;
@@ -399,7 +473,9 @@
   height: 62px;
   border-radius: 50%;
   background: var(--color-paper);
-  box-shadow: 0 8px 28px rgba(20, 22, 26, 0.22);
+  border: 1px solid var(--color-accent);
+  box-shadow: 0 8px 28px rgba(20, 22, 26, 0.18),
+    0 0 0 6px var(--color-accent-soft);
   transition: transform var(--duration-base) var(--ease-premium);
 }
 
@@ -449,7 +525,8 @@
 .personal {
   margin-top: var(--space-7);
   padding-top: var(--space-5);
-  border-top: 1px solid var(--color-ink);
+  border-top: 1px solid transparent;
+  border-image: linear-gradient(90deg, var(--color-accent) 0%, var(--color-ink) 22%, var(--color-line) 100%) 1;
   display: grid;
   grid-template-columns: 13rem minmax(0, 1fr);
   gap: var(--space-5);
@@ -457,6 +534,7 @@
 }
 
 .portrait {
+  position: relative;
   margin: 0;
   border: 1px solid var(--color-line);
   background: var(--color-paper);
@@ -470,6 +548,18 @@
   object-fit: cover;
   display: block;
   filter: grayscale(1);
+}
+
+.portrait::after {
+  content: "";
+  position: absolute;
+  left: -1px;
+  bottom: -1px;
+  width: 34px;
+  height: 34px;
+  border-left: 2px solid var(--color-accent);
+  border-bottom: 2px solid var(--color-accent);
+  pointer-events: none;
 }
 
 .personalText {
