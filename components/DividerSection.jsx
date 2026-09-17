@@ -62,15 +62,14 @@ export default function DividerSection() {
   return (
     <section id="divider" className={styles.divider}>
       <div className={styles.inner}>
-        <p className={`eyebrow-label ${styles.eyebrow}`}>One System</p>
+        <p className={`eyebrow-label ${styles.eyebrow}`}>Intent</p>
         <h2 className={styles.statement}>
-          One grid. One compound.
+          I want to build things
           <br />
-          One connected environment.
+          that outlast me.
         </h2>
         <p className={styles.support}>
-          What follows isn&rsquo;t a gallery &mdash; it&rsquo;s a single place,
-          scrolled through.
+          The work so far, and the teams I learned it from.
         </p>
       </div>
 
