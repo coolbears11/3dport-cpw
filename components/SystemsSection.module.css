@@ -567,7 +567,67 @@
 }
 
 
+/* The photo strip under the hobbies. Square tiles, captions revealed on
+   hover, and the same accent treatment as everything else here. */
+.lifeGrid {
+  list-style: none;
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+/* Caption sits BELOW the tile rather than over it, so the photograph is
+   never covered and the labels line up as a row of their own. */
+.lifeTile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.lifeTile img {
+  aspect-ratio: 4 / 5;
+  border: 1px solid var(--color-line);
+  border-radius: 4px;
+  background: var(--color-paper);
+}
+
+.lifeTile img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(1);
+  transition: filter var(--duration-base) var(--ease-premium),
+    border-color var(--duration-base) var(--ease-premium),
+    box-shadow var(--duration-base) var(--ease-premium);
+}
+
+.lifeTile:hover img {
+  filter: grayscale(0);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
+}
+
+.lifeCaption {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
+  transition: color var(--duration-base) var(--ease-premium);
+}
+
+.lifeTile:hover .lifeCaption {
+  color: var(--color-ink);
+}
+
 @media (max-width: 860px) {
+  .lifeGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .personal {
     grid-template-columns: minmax(0, 1fr);
   }

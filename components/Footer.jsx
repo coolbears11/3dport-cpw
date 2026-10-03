@@ -5,9 +5,11 @@ export default function Footer() {
     <footer id="footer" className={styles.footer}>
       <div className={styles.top}>
         <p className={styles.statement}>
-          Currently open to new collaborations
+          Currently open to new collaborations in energy,
           <br />
-          in energy, infrastructure, and systems design.
+          AI infrastructure, capital projects advisory,
+          <br />
+          and sustainable buildings.
         </p>
       </div>
 

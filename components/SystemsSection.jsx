@@ -80,6 +80,15 @@ const HOBBIES = [
   "Training AI models",
 ];
 
+// Each tile hides itself if its file is missing, so a half-uploaded
+// gallery degrades to fewer tiles rather than a row of broken icons.
+const LIFE = [
+  { src: "/images/life/life-traveling.jpg", caption: "Travel" },
+  { src: "/images/life/life-snowboarding.jpg", caption: "Snowboarding" },
+  { src: "/images/life/life-outdoors.jpg", caption: "Outdoors & Hiking" },
+  { src: "/images/life/life-teamwork.jpg", caption: "Teams" },
+];
+
 const AFFILIATIONS = [
   { org: "DBIA", role: "Social Chair, Design-Build Institute of America" },
   { org: "CMAA", role: "Member" },
@@ -90,6 +99,7 @@ const AFFILIATIONS = [
 
 export default function SystemsSection() {
   const [playing, setPlaying] = useState(false);
+  const [brokenImages, setBrokenImages] = useState({});
   const [revealRef, revealed] = useReveal();
 
   return (
@@ -176,9 +186,16 @@ export default function SystemsSection() {
             </dl>
 
             <h3 className={`${styles.columnTitle} ${styles.columnTitleSpaced}`}>
-              Competition
+              Also
             </h3>
             <dl className={styles.affiliations}>
+              <div className={styles.affiliation}>
+                <dt>Autodesk</dt>
+                <dd>
+                  Design &amp; Make Student Ambassador, promoting Autodesk
+                  AEC tools for student engagement on campus.
+                </dd>
+              </div>
               <div className={styles.affiliation}>
                 <dt>ASC Reno</dt>
                 <dd>
@@ -242,6 +259,22 @@ export default function SystemsSection() {
             <ul className={styles.tags}>
               {HOBBIES.map((item) => (
                 <li key={item}>{item}</li>
+              ))}
+            </ul>
+
+            <ul className={styles.lifeGrid}>
+              {LIFE.filter((item) => !brokenImages[item.src]).map((item) => (
+                <li key={item.src} className={styles.lifeTile}>
+                  <img
+                    src={item.src}
+                    alt={item.caption}
+                    loading="lazy"
+                    onError={() =>
+                      setBrokenImages((prev) => ({ ...prev, [item.src]: true }))
+                    }
+                  />
+                  <span className={styles.lifeCaption}>{item.caption}</span>
+                </li>
               ))}
             </ul>
           </div>
