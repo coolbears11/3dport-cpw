@@ -101,7 +101,7 @@ const LIFE = [
 ];
 
 const AFFILIATIONS = [
-  { org: "DBIA", role: "Member, Design-Build Institute of America" },
+  { org: "DBIA", role: "Member" },
   { org: "CMAA", role: "Member" },
   { org: "ASCE", role: "Member" },
   { org: "CEMA", role: "Member" },
