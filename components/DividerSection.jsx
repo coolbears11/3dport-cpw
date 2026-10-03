@@ -101,14 +101,16 @@ export default function DividerSection() {
             <li key={item.company} className={styles.incoming}>
               <span className={styles.incomingTag}>Incoming</span>
               <h3 className={styles.company}>{item.company}</h3>
-              <p className={styles.incomingRole}>{item.role}</p>
-              <p className={styles.meta}>
-                <span className={styles.type}>{item.detail}</span>
+              <div>
+                <p className={styles.incomingRole}>{item.role}</p>
+              <p className={styles.incomingMeta}>
+                {item.detail}
                 <span className={styles.dot} aria-hidden="true">
                   /
                 </span>
                 {item.location}
-              </p>
+                </p>
+              </div>
               <p className={styles.period}>{item.period}</p>
             </li>
           ))}

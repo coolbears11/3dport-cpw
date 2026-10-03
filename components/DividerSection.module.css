@@ -37,10 +37,8 @@
   margin: 0 auto;
 }
 
-/* --- the four internships ------------------------------------------ */
+/* --- experience blocks ---------------------------------------------- */
 
-/* Wider than .inner: four columns need the room. The statement above
-   stays centred at 42rem so the two blocks read as separate thoughts. */
 .experience {
   width: 100%;
   max-width: 68rem;
@@ -53,6 +51,81 @@
   margin-bottom: var(--space-5);
 }
 
+.experienceLabelSpaced {
+  margin-top: var(--space-7);
+}
+
+/* --- incoming roles: one horizontal row each ------------------------ */
+/* Laid out as rows rather than cards. Each role reads left to right
+   across the page like a line on a schedule, which keeps the two of them
+   compact and stops them competing with the completed work below. */
+
+.incomingGrid {
+  list-style: none;
+  margin: 0 0 var(--space-5);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.incoming {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(7rem, 11rem) minmax(0, 1fr) auto;
+  gap: var(--space-4);
+  align-items: baseline;
+  padding: var(--space-4) 0;
+  border-top: 1px solid transparent;
+  border-image: linear-gradient(
+      90deg,
+      var(--color-accent) 0%,
+      var(--color-ink) 26%,
+      var(--color-line) 100%
+    )
+    1;
+}
+
+.incoming:last-child {
+  border-bottom: 1px solid var(--color-line);
+}
+
+.incomingTag {
+  justify-self: start;
+  padding: 0.22rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  border: 1px solid var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
+  white-space: nowrap;
+}
+
+.incoming .company {
+  margin-bottom: 0;
+}
+
+.incomingRole {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--color-ink);
+}
+
+.incomingMeta {
+  font-size: 0.84rem;
+  line-height: 1.4;
+  color: var(--color-ink-soft);
+  margin-top: 0.1rem;
+}
+
+.incoming .period {
+  margin-bottom: 0;
+  white-space: nowrap;
+  text-align: right;
+}
+
+/* --- completed internships ------------------------------------------ */
+
 .grid {
   list-style: none;
   margin: 0;
@@ -62,8 +135,6 @@
   gap: var(--space-5);
 }
 
-/* A hairline above each entry rather than boxes — this should read like a
-   spec sheet, not four cards. */
 .role {
   border-top: 1px solid var(--color-ink);
   padding-top: var(--space-3);
@@ -119,12 +190,11 @@
   color: var(--color-ink-soft);
 }
 
-/* Same accent dot the eyebrow labels use, so the two systems agree. */
 .skills li::before {
   content: "";
   position: absolute;
   left: 0;
-  top: 0.6em;
+  top: 0.5em;
   width: 4px;
   height: 4px;
   border-radius: 50%;
@@ -136,6 +206,13 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-5) var(--space-4);
   }
+  .incoming {
+    grid-template-columns: minmax(7rem, 10rem) minmax(0, 1fr) auto;
+    row-gap: var(--space-2);
+  }
+  .incomingTag {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (max-width: 560px) {
@@ -144,5 +221,12 @@
   }
   .experience {
     margin-top: var(--space-6);
+  }
+  .incoming {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0.25rem;
+  }
+  .incoming .period {
+    text-align: left;
   }
 }
