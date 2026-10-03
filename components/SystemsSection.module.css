@@ -356,6 +356,22 @@
   opacity: 1;
 }
 
+/* Planned credentials read as outlines rather than solid chips, so the
+   difference between held and pursued is visible at a glance. */
+.tagsPending li {
+  border-style: dashed;
+  background: none;
+  color: var(--color-ink-soft);
+}
+
+.tagsPending li::before {
+  opacity: 0.3;
+}
+
+.tagsPending li:hover {
+  color: var(--color-ink);
+}
+
 .affiliations {
   margin: 0;
   display: flex;

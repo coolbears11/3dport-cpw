@@ -29,13 +29,24 @@ const SOFTWARE = [
 
 const CERTIFICATIONS = ["OSHA 10-Hour", "LEED Green Associate"];
 
+// Kept deliberately separate from the credentials above. Listing the two
+// together would blur what is held against what is planned.
+const PURSUING = [
+  "EIT, then PE",
+  "LEED BD+C",
+  "CMIT, then CCM",
+  "PMP",
+  "CCP (AACE)",
+  "General Contractor license",
+];
+
 // The journey column, sitting beside the Direction copy. Chronological,
 // and the point is the last entry rather than the joke: four of these
 // went nowhere, one came with drawings.
 const DREAM_JOBS = [
   { job: "Astronaut", when: "Age six" },
-  { job: "Pro League player", when: "Middle school" },
-  { job: "Pro basketball player", when: "High school" },
+  { job: "Pro League of Legends player", when: "Middle school" },
+  { job: "Pro athlete", when: "High school" },
   { job: "Software developer", when: "High school" },
   { job: "Construction engineer", when: "Cal Poly Pomona", here: true },
 ];
@@ -90,7 +101,7 @@ const LIFE = [
 ];
 
 const AFFILIATIONS = [
-  { org: "DBIA", role: "Social Chair, Design-Build Institute of America" },
+  { org: "DBIA", role: "Member, Design-Build Institute of America" },
   { org: "CMAA", role: "Member" },
   { org: "ASCE", role: "Member" },
   { org: "CEMA", role: "Member" },
@@ -176,6 +187,15 @@ export default function SystemsSection() {
             </h3>
             <ul className={styles.tags}>
               {CERTIFICATIONS.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+
+            <h3 className={`${styles.columnTitle} ${styles.columnTitleSpaced}`}>
+              Working toward
+            </h3>
+            <ul className={`${styles.tags} ${styles.tagsPending}`}>
+              {PURSUING.map((item) => (
                 <li key={item}>{item}</li>
               ))}
             </ul>
