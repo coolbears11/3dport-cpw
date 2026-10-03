@@ -5,6 +5,25 @@ import styles from "./DividerSection.module.css";
 // of it. The four entries also happen to cover four different delivery
 // models — general contractor, general contractor, design-build,
 // subcontractor — which makes a point about range on its own.
+// Roles not yet started. Kept in their own block, clearly labelled, so a
+// reader never mistakes an incoming internship for a completed one.
+const INCOMING = [
+  {
+    company: "Tesla",
+    role: "Construction Project Management Intern",
+    detail: "Megapack and Optimus facilities",
+    location: "Lathrop, CA",
+    period: "Spring 2027",
+  },
+  {
+    company: "FTI Consulting",
+    role: "Consulting Intern",
+    detail: "Construction, Projects & Assets",
+    location: "New York, NY",
+    period: "Summer 2027",
+  },
+];
+
 const EXPERIENCE = [
   {
     company: "Swinerton",
@@ -75,6 +94,27 @@ export default function DividerSection() {
 
       <div className={styles.experience}>
         <p className={`eyebrow-label ${styles.experienceLabel}`}>
+          What&rsquo;s Next
+        </p>
+        <ul className={styles.incomingGrid}>
+          {INCOMING.map((item) => (
+            <li key={item.company} className={styles.incoming}>
+              <span className={styles.incomingTag}>Incoming</span>
+              <h3 className={styles.company}>{item.company}</h3>
+              <p className={styles.incomingRole}>{item.role}</p>
+              <p className={styles.meta}>
+                <span className={styles.type}>{item.detail}</span>
+                <span className={styles.dot} aria-hidden="true">
+                  /
+                </span>
+                {item.location}
+              </p>
+              <p className={styles.period}>{item.period}</p>
+            </li>
+          ))}
+        </ul>
+
+        <p className={`eyebrow-label ${styles.experienceLabel} ${styles.experienceLabelSpaced}`}>
           Where It Came From
         </p>
         <ol className={styles.grid}>

@@ -1,0 +1,48 @@
+/* ---- ADD THESE RULES to the END of DividerSection.module.css ---- */
+
+.incomingGrid {
+  list-style: none;
+  margin: 0 0 var(--space-6);
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5);
+  max-width: 44rem;
+}
+
+.incoming {
+  position: relative;
+  border-top: 1px solid transparent;
+  border-image: linear-gradient(90deg, var(--color-accent) 0%, var(--color-ink) 30%, var(--color-line) 100%) 1;
+  padding-top: var(--space-3);
+}
+
+.incomingTag {
+  display: inline-block;
+  margin-bottom: var(--space-2);
+  padding: 0.2rem 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  border: 1px solid var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
+}
+
+.incomingRole {
+  font-size: 0.88rem;
+  line-height: 1.4;
+  color: var(--color-ink);
+  margin-bottom: 0.15rem;
+}
+
+.experienceLabelSpaced {
+  margin-top: var(--space-6);
+}
+
+@media (max-width: 560px) {
+  .incomingGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

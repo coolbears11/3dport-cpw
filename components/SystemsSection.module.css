@@ -10,6 +10,18 @@
   margin: 0 auto;
 }
 
+/* Portrait leads the section, beside the heading. */
+.intro {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+.introText {
+  min-width: 0;
+}
+
 .eyebrow {
   color: var(--color-ink-soft);
   margin-bottom: var(--space-3);
@@ -527,16 +539,15 @@
   padding-top: var(--space-5);
   border-top: 1px solid transparent;
   border-image: linear-gradient(90deg, var(--color-accent) 0%, var(--color-ink) 22%, var(--color-line) 100%) 1;
-  display: grid;
-  grid-template-columns: 13rem minmax(0, 1fr);
-  gap: var(--space-5);
-  align-items: start;
 }
 
 .portrait {
   position: relative;
+  flex: 0 0 auto;
+  width: 11rem;
   margin: 0;
   border: 1px solid var(--color-line);
+  border-radius: 4px;
   background: var(--color-paper);
   overflow: hidden;
   aspect-ratio: 1 / 1;
@@ -547,7 +558,6 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  filter: grayscale(1);
 }
 
 .portrait::after {
@@ -576,6 +586,7 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--space-4);
+  margin-top: var(--space-5);
 }
 
 /* Caption sits BELOW the tile rather than over it, so the photograph is
@@ -598,16 +609,15 @@
   height: auto;
   object-fit: cover;
   display: block;
-  filter: grayscale(1);
-  transition: filter var(--duration-base) var(--ease-premium),
-    border-color var(--duration-base) var(--ease-premium),
-    box-shadow var(--duration-base) var(--ease-premium);
+  transition: border-color var(--duration-base) var(--ease-premium),
+    box-shadow var(--duration-base) var(--ease-premium),
+    transform var(--duration-base) var(--ease-premium);
 }
 
 .lifeTile:hover img {
-  filter: grayscale(0);
   border-color: var(--color-accent);
   box-shadow: 0 0 0 3px var(--color-accent-soft);
+  transform: translateY(-3px);
 }
 
 .lifeCaption {
@@ -628,11 +638,11 @@
   .lifeGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .personal {
-    grid-template-columns: minmax(0, 1fr);
+  .intro {
+    gap: var(--space-4);
   }
   .portrait {
-    max-width: 12rem;
+    width: 8rem;
   }
   .split {
     grid-template-columns: minmax(0, 1fr);

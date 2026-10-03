@@ -105,8 +105,15 @@ export default function SystemsSection() {
   return (
     <section id="systems" className={styles.systems}>
       <div className={styles.inner}>
-        <p className={`eyebrow-label ${styles.eyebrow}`}>Systems</p>
-        <h2 className={styles.heading}>Direction</h2>
+        <div className={styles.intro}>
+          <figure className={styles.portrait}>
+            <img src="/images/jason-lou.jpg" alt="Jason Lou" />
+          </figure>
+          <div className={styles.introText}>
+            <p className={`eyebrow-label ${styles.eyebrow}`}>Systems</p>
+            <h2 className={styles.heading}>Direction</h2>
+          </div>
+        </div>
 
         <div className={styles.split} ref={revealRef} data-revealed={revealed}>
           <div className={styles.prose}>
@@ -251,11 +258,8 @@ export default function SystemsSection() {
         </figure>
 
         <div className={styles.personal}>
-          <figure className={styles.portrait}>
-            <img src="/images/jason-lou.jpg" alt="Jason Lou" loading="lazy" />
-          </figure>
           <div className={styles.personalText}>
-            <h3 className={styles.columnTitle}>Off the clock</h3>
+            <h3 className={styles.columnTitle}>Off the Site</h3>
             <ul className={styles.tags}>
               {HOBBIES.map((item) => (
                 <li key={item}>{item}</li>
