@@ -12,9 +12,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Field Notes — Energy Systems Portfolio",
+  title: "Jason Lou — Construction Engineering Portfolio",
   description:
-    "A cinematic portfolio prototype exploring energy infrastructure through one continuous 3D environment.",
+    "Construction engineering, preconstruction and estimating. Data center feasibility, capital projects and energy infrastructure.",
 };
 
 export default function RootLayout({ children }) {
