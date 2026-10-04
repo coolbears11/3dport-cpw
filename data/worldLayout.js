@@ -124,6 +124,21 @@ export const ZONE_A_TURBINES = [
 // A diagonal cascade of solar clusters well off to the east, clear of every
 // building footprint — a compound has room to spread these out rather than
 // hugging one spot next to the anchor building.
+// --- Nuclear: two hyperbolic cooling shells and a containment dome, in
+// the power field west of the compound. PlaceholderEnvironment already
+// renders these; without the export below it calls .towers.map() on
+// undefined and the whole scene throws on first render.
+export const ZONE_U_NUCLEAR = {
+  towers: [
+    { position: [-41, -14], scale: 1 },
+    { position: [-36.5, -16], scale: 0.88 },
+  ],
+  containment: { position: [-45, -10] },
+};
+
+// --- Hydro: a dam wall holding a reservoir, north of the wind field.
+export const ZONE_U_DAM = { position: [-34, 11], width: 12, rotationY: -Math.PI / 14 };
+
 export const ZONE_A_SOLAR_FIELD = {
   origin: [-21, -13],
   step: [-3.9, -2.9],
@@ -225,6 +240,38 @@ export const UTILITY_CORRIDORS = [
     ],
   },
 ];
+
+
+// =====================================================================
+// TRANSMISSION — the backdrop corridor
+// =====================================================================
+// A 287/115 kV line running east-west well behind the compound, with a
+// switchyard where the 287 circuit lands. Sited at z = -30: clear of the
+// buildings (z -9..10), the turbines (z >= -19) and the solar cascade
+// (z >= -23), so nothing overlaps and the line reads as distant
+// infrastructure on the horizon rather than site furniture.
+//
+// Pylon X positions are precomputed rather than derived at render time,
+// and the pulse waypoints below are a module-level constant. That matters:
+// EnergyPaths memoises its curve on the `waypoints` prop, so an inline
+// array literal would be a new reference every render and rebuild a
+// 120-point CatmullRom curve every frame.
+export const TRANSMISSION = {
+  z: -30.0,
+  pylons: [-46.0, -35.25, -24.5, -13.75, -3.0, 7.75, 18.5, 29.25, 40.0],
+  takeoffPylon: 18.5,
+  circuits: [
+    { id: "287", label: "287 kV", height: 9.6, arm: 4.4, sag: 0.59, phases: 3 },
+    { id: "115", label: "115 kV", height: 6.6, arm: 3.0, sag: 0.54, phases: 3 },
+  ],
+};
+
+// The switchyard the 287 circuit lands in, just south of the takeoff tower.
+export const TRANSMISSION_SUBSTATION = { position: [18.5, -23], rotationY: 0 };
+
+// One live conductor: the 287 centre phase, running the length of the line
+// and dropping into the yard. MODULE-LEVEL — see the note above.
+export const TRANSMISSION_PULSE_WAYPOINTS = [[-46.0, 9.6, -30.0], [-40.62, 9.01, -30.0], [-35.25, 9.6, -30.0], [-29.88, 9.01, -30.0], [-24.5, 9.6, -30.0], [-19.12, 9.01, -30.0], [-13.75, 9.6, -30.0], [-8.38, 9.01, -30.0], [-3.0, 9.6, -30.0], [2.38, 9.01, -30.0], [7.75, 9.6, -30.0], [13.12, 9.01, -30.0], [18.5, 9.6, -30.0], [18.5, 6.0, -27.0], [18.5, 2.4, -23.6]];
 
 export const ZONE_A_MERGE_POINT = [0, 0.05, -3];
 export const MERGE_TO_HERO_WAYPOINTS = [
