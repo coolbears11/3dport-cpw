@@ -19,6 +19,7 @@ import {
   PLANT,
   PLANT_DEEP,
   WATER,
+  EdgeBox,
 } from "./sceneKit";
 import {
   ZONE_A_BUILDINGS,
