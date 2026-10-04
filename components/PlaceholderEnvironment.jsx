@@ -36,9 +36,6 @@ import {
   ZONE_A_POND,
   ZONE_A_BRIDGE,
   MERGE_TO_HERO_WAYPOINTS,
-  TRANSMISSION,
-  TRANSMISSION_SUBSTATION,
-  TRANSMISSION_PULSE_WAYPOINTS,
 } from "@/data/worldLayout";
 
 const BLADE_LENGTH = 1.7;
@@ -333,137 +330,6 @@ function UtilityCorridor({ points, strands = 7, spacing = 0.17, accent = false }
   );
 }
 
-// A lattice transmission tower: four battered legs meeting at a waist, a
-// mast above, and crossarms carrying insulator strings. Simplified to
-// about a dozen meshes — at this distance actual truss members are
-// invisible, so the silhouette is what matters.
-function Pylon({ x, z, height, arm, phases = 3 }) {
-  const base = 1.5;
-  const waist = height * 0.52;
-  const legTop = 0.42;
-  return (
-    <group position={[x, 0, z]}>
-      {[[-1, -1], [1, -1], [-1, 1], [1, 1]].map(([sx, sz], i) => {
-        const dx = (base - legTop) * sx * 0.5;
-        const dz = (base - legTop) * sz * 0.5;
-        const lean = Math.atan2(Math.hypot(dx, dz), waist);
-        return (
-          <mesh
-            key={i}
-            position={[(sx * (base + legTop)) / 4, waist / 2, (sz * (base + legTop)) / 4]}
-            rotation={[sz * lean * 0.9, 0, -sx * lean * 0.9]}
-          >
-            <boxGeometry args={[0.12, waist, 0.12]} />
-            <meshStandardMaterial color={INK_DETAIL} roughness={0.6} />
-          </mesh>
-        );
-      })}
-      {/* waist brace */}
-      <mesh position={[0, waist, 0]}>
-        <boxGeometry args={[legTop * 2.2, 0.1, legTop * 2.2]} />
-        <meshStandardMaterial color={INK_DETAIL} roughness={0.6} />
-      </mesh>
-      {/* mast */}
-      <mesh position={[0, (waist + height) / 2, 0]}>
-        <boxGeometry args={[0.34, height - waist, 0.34]} />
-        <meshStandardMaterial color={INK_DETAIL} roughness={0.6} />
-      </mesh>
-      {/* crossarm + insulator strings */}
-      <mesh position={[0, height, 0]}>
-        <boxGeometry args={[0.14, 0.14, arm]} />
-        <meshStandardMaterial color={INK_DETAIL} roughness={0.6} />
-      </mesh>
-      {Array.from({ length: phases }).map((_, i) => {
-        const offset = (i - (phases - 1) / 2) * (arm / (phases - 1 || 1));
-        return (
-          <mesh key={i} position={[0, height - 0.26, offset]}>
-            <cylinderGeometry args={[0.05, 0.05, 0.5, 6]} />
-            <meshStandardMaterial color={PLANT_DEEP} roughness={0.5} />
-          </mesh>
-        );
-      })}
-    </group>
-  );
-}
-
-// One conductor running the whole line, sagging between every pylon. The
-// sag is the point: a straight segment reads as a diagram, a catenary
-// reads as a power line. Sampled per span and drawn as a single polyline
-// so six conductors cost six Line objects rather than six per span.
-function Conductor({ pylons, z, height, sag, samples = 9 }) {
-  const points = useMemo(() => {
-    const pts = [];
-    for (let i = 0; i < pylons.length - 1; i += 1) {
-      const x0 = pylons[i];
-      const x1 = pylons[i + 1];
-      const last = i === pylons.length - 2;
-      for (let s = 0; s <= samples; s += 1) {
-        if (s === samples && !last) break;
-        const t = s / samples;
-        const x = x0 + (x1 - x0) * t;
-        // parabolic approximation of a catenary: zero at the towers,
-        // maximum at midspan
-        const y = height - sag * 4 * t * (1 - t);
-        pts.push(new THREE.Vector3(x, y, z));
-      }
-    }
-    return pts;
-  }, [pylons, z, height, sag, samples]);
-
-  return <Line points={points} color={INK_DETAIL} transparent opacity={0.5} lineWidth={1} />;
-}
-
-// The switchyard where the 287 circuit lands: dead-end gantry, transformer
-// bank, and the drop conductors coming down off the takeoff tower.
-function Switchyard({ position, lineZ, takeoffX, lineHeight }) {
-  const [x, z] = position;
-  const dropPoints = useMemo(() => {
-    const arms = [-1.4, 0, 1.4];
-    return arms.map((a) => [
-      new THREE.Vector3(takeoffX, lineHeight - 0.3, lineZ + a),
-      new THREE.Vector3(x + a * 0.6, (lineHeight + 2.6) / 2, (lineZ + z) / 2),
-      new THREE.Vector3(x + a * 0.6, 2.6, z + 1.1),
-    ]);
-  }, [x, z, lineZ, takeoffX, lineHeight]);
-
-  return (
-    <group>
-      {dropPoints.map((pts, i) => (
-        <Line key={i} points={pts} color={INK_DETAIL} transparent opacity={0.45} lineWidth={1} />
-      ))}
-      <group position={[x, 0, z]}>
-        <mesh position={[0, 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-          <planeGeometry args={[7, 4.4]} />
-          <meshStandardMaterial color={PLANT_DEEP} roughness={0.95} />
-        </mesh>
-        {/* dead-end gantry */}
-        {[-2.6, 2.6].map((gx) => (
-          <mesh key={gx} position={[gx, 1.4, 1.1]}>
-            <boxGeometry args={[0.16, 2.8, 0.16]} />
-            <meshStandardMaterial color={INK_DETAIL} roughness={0.6} />
-          </mesh>
-        ))}
-        <mesh position={[0, 2.72, 1.1]}>
-          <boxGeometry args={[5.4, 0.14, 0.14]} />
-          <meshStandardMaterial color={INK_DETAIL} roughness={0.6} />
-        </mesh>
-        {/* transformer bank */}
-        {[-1.8, 0.2, 2.2].map((tx) => (
-          <group key={tx} position={[tx, 0, -0.9]}>
-            <EdgeBox args={[1.2, 1.05, 1.2]} position={[0, 0.53, 0]} color={PLANT} edgeOpacity={0.3} />
-            {[-0.3, 0.3].map((bz) => (
-              <mesh key={bz} position={[0, 1.28, bz]}>
-                <cylinderGeometry args={[0.07, 0.1, 0.46, 8]} />
-                <meshStandardMaterial color={INK_DETAIL} roughness={0.5} />
-              </mesh>
-            ))}
-          </group>
-        ))}
-      </group>
-    </group>
-  );
-}
-
 // A large, sparse blueprint-style grid lying flat on the ground, reinforcing
 // the "site plan / infrastructure map" reading from the aerial camera.
 function GroundGrid({ size = 240, divisions = 60, position = [0, 0.01, 0] }) {
@@ -589,60 +455,11 @@ export default function PlaceholderEnvironment() {
         <GroundTrace key={i} points={pts.map((p) => new THREE.Vector3(...p))} />
       ))}
 
-      {/* --- TRANSMISSION: the backdrop corridor, well behind everything.
-          Static geometry only in this block: nine lattice pylons, six
-          sagging conductors across two circuits, and the switchyard the
-          287 lands in. */}
-      {TRANSMISSION.pylons.map((px) => (
-        <Pylon
-          key={px}
-          x={px}
-          z={TRANSMISSION.z}
-          height={TRANSMISSION.circuits[0].height}
-          arm={TRANSMISSION.circuits[0].arm}
-        />
-      ))}
-      {TRANSMISSION.circuits.map((c) =>
-        Array.from({ length: c.phases }).map((_, i) => {
-          const offset = (i - (c.phases - 1) / 2) * (c.arm / (c.phases - 1 || 1));
-          return (
-            <Conductor
-              key={`${c.id}-${i}`}
-              pylons={TRANSMISSION.pylons}
-              z={TRANSMISSION.z + offset}
-              height={c.height}
-              sag={c.sag}
-            />
-          );
-        })
-      )}
-      <Switchyard
-        position={TRANSMISSION_SUBSTATION.position}
-        lineZ={TRANSMISSION.z}
-        takeoffX={TRANSMISSION.takeoffPylon}
-        lineHeight={TRANSMISSION.circuits[0].height}
-      />
-
       {/* The banded corridors, including the trunk run from the power
           field. Static lines only — deliberately NOT EnergyPaths. */}
       {UTILITY_CORRIDORS.map((c) => (
         <UtilityCorridor key={c.id} points={c.points} strands={c.strands} accent={c.accent} />
       ))}
-      {/* The one live conductor: the 287 centre phase, running the length
-          of the line and dropping into the switchyard. The waypoints are a
-          module-level constant in worldLayout.js — passing an inline array
-          here would hand EnergyPaths a new reference every render and
-          rebuild its 120-point curve every frame. */}
-      <EnergyPaths
-        waypoints={TRANSMISSION_PULSE_WAYPOINTS}
-        lineColor={INK_DETAIL}
-        lineOpacity={0.4}
-        lineWidth={1.2}
-        pulseColor={ACCENT}
-        pulses={2}
-        speed={0.035}
-      />
-
       <EnergyPaths
         waypoints={MERGE_TO_HERO_WAYPOINTS}
         lineColor={TRACE}
